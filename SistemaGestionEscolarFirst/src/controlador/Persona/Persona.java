@@ -123,7 +123,10 @@ public class Persona {
 			return false;
 		}
 	}
-	
+	/**
+	 * Metodo que valida que el largo del pass sea mayor a 5 y menor o igual a 15
+	 * @return
+	 */
 	public boolean validarPass(){
 		if (this.pass.length() > 5 && this.pass.length()<=15) {
 			return true;

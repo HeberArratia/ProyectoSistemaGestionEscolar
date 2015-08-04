@@ -13,25 +13,17 @@ public class Curso {
 	private int cupos;
 	private static final int ROW_COUNT = 100;
 	
-	/**
-	 * Constructor
-	 */
 	public Curso() {
 		super();
 	}
 	
-	/**
-	 * Constructor
-	 * @param nombreCurso
-	 */
 	public Curso(String nombreCurso) {
 		super();
 		this.nombreCurso = nombreCurso;
 	}
 
 	/**
-	 * Metodo que permite desactivar un curso especificado por parametro cambiando su atributo
-	 * de pagado (1) a no pagado (0).
+	 * Metodo que permite desactivar un curso especificado por parametro
 	 * 
 	 * @param id del curso a desactivar
 	 * @param rutDirector quien desactiva el curso
@@ -39,13 +31,13 @@ public class Curso {
 	 */
 	public static String desactivarCurso(int id, String rutDirector) {	
 		try {
-			// Condicion de busqueda del director (rutDirector)
+			// Condicion de busqueda del director (rut persona)
 			String queryDirector = "persona.rut='"+rutDirector+"'";
 			// Se almacena en la variable el director con la condicion entregada
 			orm.Director lormDirector = orm.DirectorDAO.loadDirectorByQuery(queryDirector, null);
 			// Si el director existe se puede proceder
 			if (lormDirector!=null){
-				//Condicion de busqueda del curso (id)
+				//Condicion de busqueda del curso (id del curso)
 				String queryCurso="id='"+id+"'";
 				// Se almacena en la variable el curso con la condicion entregada
 				orm.Curso lormCurso=orm.CursoDAO.loadCursoByQuery(queryCurso, null);
@@ -83,7 +75,7 @@ public class Curso {
 	 */
 	public static String crearCurso(Curso nuevoCurso, String rutJefeAdm) {
 		try {
-			// Condicion de busqueda de la persona (rutJefeAdm)
+			// Condicion de busqueda de la persona (rut persona)
 			String queryPersona= "persona.rut='"+rutJefeAdm+"'";
 			// Se almacena en la variable el jefe de administracion con la condicion entregada
 			orm.Jefeadministracion lormJefeAdm = orm.JefeadministracionDAO.loadJefeadministracionByQuery(queryPersona, null);
@@ -115,6 +107,7 @@ public class Curso {
 	
 	/**
 	 * Metodo que permite asignarle un profesor existente a un curso existente
+	 * 
 	 * @param id del curso a cual se le va a asignar un profesor
 	 * @param nombreCurso a cual se le va a asignar el profesor
 	 * @param rutProfe quien se asigna al curso
@@ -123,7 +116,7 @@ public class Curso {
 	 */
 	public static String asignarProfesor(int id, String nombreCurso,String rutProfe,String rutJefeAdm ) {
 		try {
-			//Condicion de busqueda del curso (id)
+			//Condicion de busqueda del curso (id del curso)
 			String queryCurso = "id='" + id + "'";
 			//Se almacena en la variable el curso con la condicion entregada
 			orm.Curso lormCurso = orm.CursoDAO.loadCursoByQuery(queryCurso,	null);
@@ -133,19 +126,19 @@ public class Curso {
 				if (lormCurso.getEstadocurso()!=0){
 					//Si el nombre del curso es igual al nombre recibido por parametro se puede proceder
 					if (lormCurso.getNombreCurso().equals(nombreCurso)){
-						// Condicion de busqueda del jefe de administracion (rutJefeAdm)
+						// Condicion de busqueda del jefe de administracion (rut persona)
 						String queryJefeAd = "persona.rut='" + rutJefeAdm + "'";
 						// Se almacena en la variable el jefe de administracion con la condicion entregada
 						orm.Jefeadministracion lormJefeadministracion = orm.JefeadministracionDAO.loadJefeadministracionByQuery(queryJefeAd, null);
 						// Si el jefe de administracion existe se puede proceder
 						if (lormJefeadministracion !=null){
-							//Condicion de busqueda del profesor (rutProfe)
+							//Condicion de busqueda del profesor (rut persona)
 							String queryProfesor = "persona.rut='" + rutProfe + "'";
 							//Guardamos en la variable el profesor con la condicion entregada
 							orm.Profesor lormProfesor = orm.ProfesorDAO.loadProfesorByQuery(queryProfesor, null);
 							// Si el profesor existe se puede proceder
 							if (lormProfesor != null){
-								// Condicion de busqueda del curso_profesor (id del curso)
+								// Condicion de busqueda de curso_profesor (id del curso)
 								String queryCur_Prof = "curso.id='" + id + "'";
 								// Variable que almacena el curso_profesor con la condicion entregada
 								orm.Curso_profesor lormCurso_profesorBuscar = orm.Curso_profesorDAO.loadCurso_profesorByQuery(queryCur_Prof, null);
@@ -163,7 +156,7 @@ public class Curso {
 									String querySueldoProf = "profesor.id='" + lormProfesor.getId() + "'";
 									// Arreglo que almacena los sueldoprofesor con la condicion entregada
 									orm.Sueldo[] ormSueldos = orm.SueldoDAO.listSueldoByQuery(querySueldoProf, null);
-									// Lo siguiente permite actualizar la cantidad de curso y monto de los 10 sueldos del profesor
+									// Lo siguiente permite actualizar la cantidad de cursos y monto de los 10 sueldos del profesor
 									// Obtenemos el largo del arreglo
 									int length = ormSueldos.length;
 									// Obtenemos la cantidad de curso que tiene asignado el profesor
@@ -207,7 +200,7 @@ public class Curso {
 	/**
 	 * Metodo que permite inscribir un estudiante existente en un curso existente
 	 * 
-	 * @param idCurso el cual se le inscribe el estudiante
+	 * @param idCurso al cual se le inscribe el estudiante
 	 * @param rutEstudiante el cual se inscribe en el curso
 	 * @param rutProfesor quien inscribe al estudiante en el curso
 	 * @return string de confirmacion
@@ -248,10 +241,9 @@ public class Curso {
 							// Guardamos estudiante_curso
 							orm.Estudiante_cursoDAO.save(lormEstudiante_curso);
 							
-							return "alumno inscrito";
+							return "Alumno inscrito";
 						} return "Acceso denegado al curso";
 					}
-					// Sin comprobar
 					return "No quedan cupos en el curso";
 				} 
 				return "El curso no se encuentra activo";
@@ -284,10 +276,10 @@ public class Curso {
 			orm.Estudiante lormEstudiante = orm.EstudianteDAO.loadEstudianteByQuery(condicion, null);
 			// Si el profesor existe
 			if (lormProfesor!=null){
-				// Condicion de busqueda (profesor y estado del curso actuvo)
-				String condicionCurProf= "profesor='"+lormProfesor+ "'" + " and curso.estadocurso='" + 1 + "'";
+				// Condicion de busqueda (profesor y estado del curso activo)
+				String queryCurProf= "profesor='"+lormProfesor+ "'" + " and curso.estadocurso='" + 1 + "'";
 				// Arreglo que almacena todas las relaciones curso_profesor que existen
-				orm.Curso_profesor[] ormCurso_profesors = orm.Curso_profesorDAO.listCurso_profesorByQuery(condicionCurProf, null);
+				orm.Curso_profesor[] ormCurso_profesors = orm.Curso_profesorDAO.listCurso_profesorByQuery(queryCurProf, null);
 				// Se retorna el largo del arreglo
 				return ormCurso_profesors.length;
 			// Si el estudiante existe

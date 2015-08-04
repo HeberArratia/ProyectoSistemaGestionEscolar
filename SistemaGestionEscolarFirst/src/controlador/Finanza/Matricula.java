@@ -8,66 +8,42 @@ public class Matricula {
 	private int monto;
 
 	/**
-	 * Metodo que permite pagar la matricula de un estudiante
-	 * @param rutEstudiante
-	 * @param rutSecretaria
-	 * @param monto
-	 * @return
+	 * Metodo que permite cancelar la matricula de un estudiante
+	 * @param rutEstudiante a quien se le cancela la matricula
+	 * @param rutSecretaria quien cancela la matricula
+	 * @param monto a pagar
+	 * @return string de confirmacion
 	 */
 	public static String pagarMatricula(String rutEstudiante,
 			String rutSecretaria, int monto) {
 		try {
 			// Condicion de busqueda de el estudiante
-			String condicionEstudiante = "persona.rut='" + rutEstudiante + "'";
-			// Asignar estudiante con el rut especificado
-			orm.Estudiante lormEstudiante = orm.EstudianteDAO
-					.loadEstudianteByQuery(condicionEstudiante, null);
-
+			String queryEstudiante = "persona.rut='" + rutEstudiante + "'";
+			// Variable que almacena el estudiante con la condicion entregada
+			orm.Estudiante lormEstudiante = orm.EstudianteDAO.loadEstudianteByQuery(queryEstudiante, null);
 			// Condicion de busqueda de la secretaria
 			String condicionSecretaria = "persona.rut='" + rutSecretaria + "'";
-			// Asignar secretaria con el rut especificado
-			orm.Secretaria lormSecretaria = orm.SecretariaDAO
-					.loadSecretariaByQuery(condicionSecretaria, null);
-
-			/*
-			 * Validar que exista estudiante y secretaria ingresados por
-			 * paramentros
-			 */
-			/*
-			 * Si no tienen un valor nulo, quiere decir que existen y se puede
-			 * proceder
-			 */
+			// Variable que almacena la secretaria con la condicion entregada
+			orm.Secretaria lormSecretaria = orm.SecretariaDAO.loadSecretariaByQuery(condicionSecretaria, null);
+			// Si existe el estudiante y la secretaria se puede proceder
 			if (lormEstudiante != null && lormSecretaria != null) {
-
-				// Variable que almacena objetos de un posible pago ya realizado
-				String pagoRealizado = "estudiante='" + lormEstudiante + "'";
-				orm.Matricula lormMatriculaExiste = orm.MatriculaDAO
-						.loadMatriculaByQuery(pagoRealizado, null);
-				// validar que la matricula no se encuentre pagada
-				// Si el estado de la matricula es 0, quiere decir que no se
-				// encuentra pagada y se puede proceder
-				if (lormMatriculaExiste.getEstadoMatricula() == 0) {
-					// Condicion de busqueda de matricula, la busqueda se
-					// realiza
-					// por el id de estudiante
-					String condicionMatricula = "estudiante.id='"
-							+ lormEstudiante.getId() + "'";
-					// Asignar matricula con el rut especificado
-					orm.Matricula lormMatricula = orm.MatriculaDAO
-							.loadMatriculaByQuery(condicionMatricula, null);
-
+				// Condicion de busqueda de la matricula
+				String queryMatricula = "estudiante='" + lormEstudiante + "'";
+				orm.Matricula lormMatricula = orm.MatriculaDAO.loadMatriculaByQuery(queryMatricula, null);
+				// Si el estado de matricula se encuentra no pagado (0) se puede proceder
+				if (lormMatricula.getEstadoMatricula() == 0) {
 					// Enviar valores a matricula
 					lormMatricula.setEstadoMatricula(1);
 					lormMatricula.setMonto(monto);
 					lormMatricula.setSecretaria(lormSecretaria);
 					// Guardar matricula
 					orm.MatriculaDAO.save(lormMatricula);
-					return "matricula pagada";
+					return "Matricula pagada";
 				} else {
-					return "la matricula ya se encuentra pagada";
+					return "La matricula ya se encuentra pagada";
 				}
 			} else {
-				return "no existe estudiante o secretaria";
+				return "No existe estudiante o secretaria";
 			}
 		} catch (PersistentException e) {
 			// TODO Auto-generated catch block
@@ -76,24 +52,40 @@ public class Matricula {
 		return null;
 	}
 
-	
-	public static orm.Estudiante[] obtenerListMorososMatricula() {
-		// Se instancia una lista de estudiantes con valor nulo
-		orm.Estudiante[] ormEstudiantes = null;
+	/**
+	 * Metodo que permite obtener una lista de los estudiantes morosos en los pagos de matricula
+	 * @return
+	 */
+	public static String[][] ListMorososMatricula() {
+		   // Matriz donde se van a guardar todos los alumnos con matricula no pagada
+			String datos[][];
 		try {
-			System.out.println("Listing Estudiante...");
-			// Condicion de busqueda de el estudiante
-			String condicionEstudiante = "matricula.estadoMatricula='" + 0	+ "'";
-			// Se almacena en la lista ormEstudiantes todos los estudiantes con
-			// esta condicion
-			ormEstudiantes = orm.EstudianteDAO.listEstudianteByQuery(condicionEstudiante, null);
+			//Condicion de busqueda de la matricula (estado de matricula no pagado (0))
+			String queryMatricula = "estadoMatricula='" + 0 + "'";
+			// Arreglo que contiene la lista de matriculas de los estudiantes con la condicion entregada
+			orm.Matricula[] ormMatriculas = orm.MatriculaDAO.listMatriculaByQuery(queryMatricula,null);
+			//Obtenemos el largo del arreglo
+			int length =/* Math.min(*/ormMatriculas.length/*, ROW_COUNT)*/;
+			//A la matriz de datos le asignamos su nomero de filas y columnas
+			datos= new String [length][3];
+			for (int i = 0; i < length; i++) {
+				//Almacenamos los datos
+				datos[i][0]=""+ormMatriculas[i].getEstudiante().getPersona().getNombre() + " " + ormMatriculas[i].getEstudiante().getPersona().getNombre();
+				datos[i][1]=ormMatriculas[i].getEstudiante().getPersona().getRut();
+				datos[i][2]=""+20000;
+				System.out.println("|Nombre: "+datos[i][0]+" |Rut: "+datos[i][1]+" |Deuda: "+datos[i][2]);
+				
+			}
+			//Retornamos la matriz de datos
+			return datos;
 		} catch (PersistentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		// Se devuelve la lista del estudiantes
-		return ormEstudiantes;
+		return null;
 	}
+
 
 
 }

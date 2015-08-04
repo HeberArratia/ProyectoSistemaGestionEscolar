@@ -9,7 +9,6 @@ import controlador.Persona.*;
  *
  */
 public class Estudiante extends Persona {
-	private static final int ROW_COUNT = 100;
 
 	public Estudiante(String nombre, String apellido, String rut) {
 		super(nombre, apellido, rut);
@@ -34,17 +33,16 @@ public class Estudiante extends Persona {
 				String queryApoderado = "persona.rut='" + rutApoderado + "'";
 				// Variable que almacena el apoderado con la condicion entregada
 				orm.Apoderado lormApoderado = orm.ApoderadoDAO.loadApoderadoByQuery(queryApoderado, null);
-				// Si el apoderado existe
+				// Si el apoderado existe se puede proceder
 				if (lormApoderado != null) {
 				// Se establece una condicion de busqueda (rut persona)
-				String condicionPersona = "rut='" + nuevaPersona.getRut() + "'";
+				String queryPersona = "rut='" + nuevaPersona.getRut() + "'";
 				// Se almacena en la variable la persona con la condicion entregada
-				orm.Persona lormPersonaBuscar = orm.PersonaDAO.loadPersonaByQuery(condicionPersona, null);
+				orm.Persona lormPersonaBuscar = orm.PersonaDAO.loadPersonaByQuery(queryPersona, null);
 				// Si la persona no existe se puede proceder
 				if (lormPersonaBuscar == null) {
 					// Crear nueva persona
-					orm.Persona lormPersona = orm.PersonaDAO
-							.createPersona();
+					orm.Persona lormPersona = orm.PersonaDAO.createPersona();
 					// Enviar valores a persona encontrados en el objeto Persona
 					lormPersona.setNombre(nuevaPersona.getNombre());
 					lormPersona.setApellido(nuevaPersona.getApellido());
@@ -102,23 +100,30 @@ public class Estudiante extends Persona {
 	}
 	return null;
 	}
-
+	
 	/**
-	 * Metodo que busca un estudiante
+	 * Metodo que permite buscar un estudiante y retornar sus datos
 	 * @param rut
 	 * @return
 	 */
-	public static orm.Estudiante buscarEstudiate(String rut) {
+	public static String[] buscarEstudiate(String rut) {
 		// Condicion de busqueda de el estudiante
-		String condicionEstudiante = "persona.rut='" + rut + "'";
-		orm.Estudiante lormEstudiante = null;
+		String queryEstudiante = "persona.rut='" + rut + "'";
 		try {
 			// Asignar estudiante con el rut especificado
-			lormEstudiante = orm.EstudianteDAO.loadEstudianteByQuery(
-					condicionEstudiante, null);
-			// Si el estudiante especificado existe, se puede proceder
+			orm.Estudiante lormEstudiante = orm.EstudianteDAO.loadEstudianteByQuery(queryEstudiante, null);
+			// Si el estudiante existe se puede proceder
 			if (lormEstudiante != null) {
-				return lormEstudiante;
+				//Creamos una arreglo para almacenar los datos del estudiante
+				String datos[]=new String[4];
+				// Almacenamos los datos
+				datos[0]=""+lormEstudiante.getPersona().getNombre() + " " + lormEstudiante.getPersona().getApellido();
+				datos[1]=""+lormEstudiante.getPersona().getRut();
+				datos[2]=""+lormEstudiante.getMatricula().getEstadoMatricula();
+				datos[3]=""+lormEstudiante.getApoderado().getPersona().getNombre() + " " + lormEstudiante.getApoderado().getPersona().getNombre();
+				System.out.println("|Nombre: "+datos[0]+" |Rut: "+datos[1]+" |Matricula: "+datos[2]+" |Apoderado: "+datos[3]);
+			//Retornamos el arreglo de datos	
+			return datos;
 
 			} else {
 				return null;
@@ -132,13 +137,13 @@ public class Estudiante extends Persona {
 
 	/**
 	 * Metodo que devuelve el promedio general del estudiante
-	 * @param rutEstudiante
+	 * @param rutEstudiante a quien se le obtiene el promedio
 	 * @return promedio del estudiante
 	 */
 	public static double obtenerPromedioGeneral(String rutEstudiante){
 		double promedio = 0, sumatoria = 0;	
 		boolean valorNulo = false;
-		// Arreglo que almacena todos los cursos del estudiante
+		// datos que almacena todos los cursos del estudiante
 		orm.Estudiante_curso[] ormEstudiante_cursos = null;
 		try {			
 			//Condicion de busqueda del estudiante (rut del estudiante)
@@ -149,9 +154,9 @@ public class Estudiante extends Persona {
 			if(lormEstudiante!=null){
 			//Condicion de busqueda de estudiante_curso (estudiante)
 			String condicionEst_curso = "estudiante='" + lormEstudiante	+ "'";
-			// Arreglo que almacena el estudiante_curso con la condicion entregada
+			// datos que almacena las relaciones estudiante_curso con la condicion entregada
 			ormEstudiante_cursos = orm.Estudiante_cursoDAO.listEstudiante_cursoByQuery(condicionEst_curso, null);
-			// Se almacena el largo del arreglo
+			// Se almacena el largo del datos
 			int length = ormEstudiante_cursos.length;	
 				for (int i = 0; i < length; i++) {
 					// Si un promedio que se encuentra en la tabla estudiante_curso es nulo se cambia el valor del booleano
@@ -181,12 +186,12 @@ public class Estudiante extends Persona {
 	
 	/**
 	 * Metodo que devuelve la asistencia general de un estudiante
-	 * @param rutEstudiante
+	 * @param rutEstudiante de quien se obtiene la asistencia
 	 * @return asistencia del estudiante
 	 */
 	public static double obtenerPorcentajeAsistencia(String rutEstudiante){
 		double promedioAsistencia = 0, sumatoria = 0;	
-		// Arreglo que almacena todos los cursos del estudiante
+		// datos que almacena todos los cursos del estudiante
 		orm.Estudiante_curso[] ormEstudiante_cursos = null;
 		try {			
 			//Condicion de busqueda del estudiante (rut del estudiante)
@@ -195,11 +200,11 @@ public class Estudiante extends Persona {
 			orm.Estudiante lormEstudiante = orm.EstudianteDAO.loadEstudianteByQuery(queryEstudiante, null);
 			// Si el estudiante existe se puede proceder
 			if(lormEstudiante!=null){
-				//Condicion de busqueda de estudiante_curso (estudiante)
-				String condicionEst_curso = "estudiante='" + lormEstudiante	+ "'";
-				// Arreglo que almacena el estudiante_curso con la condicion entregada
-				ormEstudiante_cursos = orm.Estudiante_cursoDAO.listEstudiante_cursoByQuery(condicionEst_curso, null);
-				// Se almacena el largo del arreglo
+				//Condicion de busqueda de la relacion estudiante_curso (estudiante)
+				String queryEst_curso = "estudiante='" + lormEstudiante	+ "'";
+				// datos que almacena el estudiante_curso con la condicion entregada
+				ormEstudiante_cursos = orm.Estudiante_cursoDAO.listEstudiante_cursoByQuery(queryEst_curso, null);
+				// Se almacena el largo del datos
 			    int length = ormEstudiante_cursos.length;
 				for (int i = 0; i < length; i++) {
 					// Si una asistencia de la tabla estudiante_cursos es nulo se suma un cero
@@ -226,12 +231,28 @@ public class Estudiante extends Persona {
 	 * @return string
 	 */
 	public static String obtenerSituacionEstudiante(String rutEstudiante){
-		double asistencia = obtenerPorcentajeAsistencia(rutEstudiante);
-		double promedio = obtenerPromedioGeneral(rutEstudiante);
-		if (promedio==0){
-			return "Faltan promedios en curso";
-		} 
-		return "El promedio es: " + promedio + " La asistencia es: " + asistencia;
+		try {
+			//Condicion de busqueda del estudiante
+			String queryEstudiante = "persona.rut='" + rutEstudiante + "'";
+			// Almacenamos en la variable el estudiante con la condicion entregada
+			orm.Estudiante lormEstudiante;
+			lormEstudiante = orm.EstudianteDAO.loadEstudianteByQuery(queryEstudiante, null);
+			// Si el estudiante existe se puede proceder
+			if (lormEstudiante!= null){
+				//Obtenemos promedio del estudiante
+				double promedio = obtenerPromedioGeneral(rutEstudiante);
+				// Si el promedio no es cero se puede proceder
+				if (promedio!=0){
+					//Obtenemos la asistencia del estudiante
+					double asistencia = obtenerPorcentajeAsistencia(rutEstudiante);
+					//Retornamos como string el promedio y asistencia del estudiante
+					return "El promedio es: " + promedio + " La asistencia es: " + asistencia;
+				} return "Faltan promedios en curso del estudiante";			
+			} return "Estudiante no existe";
+		} catch (PersistentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
-	
 }

@@ -12,33 +12,34 @@ public class Apoderado extends Persona {
 	public Apoderado(String nombre, String apellido, String rut, String pass){
 		super(nombre, apellido, rut, pass);
 	}
-	//COMPROBADO!!
+	
+	/**
+	 * Metodo que permite agregar un nuevo apoderado
+	 * @param nuevaPersona
+	 * @return string de confirmacion
+	 */
 	public static String agregarNuevoApoderado(Persona nuevaPersona) {
 		try {
 			if (nuevaPersona.validarAtributos()) {
 				// Se establece una condicion de busqueda
 				String condicionPersona = "rut='" + nuevaPersona.getRut() + "'";
-				// Se asigna a la variable lormPersonaBuscar, la persona con la
-				// condicion establecida
-				orm.Persona lormPersonaBuscar = orm.PersonaDAO
-						.loadPersonaByQuery(condicionPersona, null);
-				// Si la persona no existe
+				// Variable que contiene la persona con la condicion entregada 
+				orm.Persona lormPersonaBuscar = orm.PersonaDAO.loadPersonaByQuery(condicionPersona, null);
+				// Si la persona no existe se puede proceder
 				if (lormPersonaBuscar == null) {
 					// Crear nueva persona
 					orm.Persona lormPersona = orm.PersonaDAO.createPersona();
-					// Enviar valores a persona encontrados en el objto Persona
-					// recibido por parametro.
+					// Asignar valores a nueva persona
 					lormPersona.setNombre(nuevaPersona.getNombre());
 					lormPersona.setApellido(nuevaPersona.getApellido());
 					lormPersona.setRut(nuevaPersona.getRut());
 					// Guardar persona
 					orm.PersonaDAO.save(lormPersona);
-
-					// Crear nueva secretaria
-					orm.Apoderado lormApoderado = orm.ApoderadoDAO
-							.createApoderado();
+					// Crear nuevo apoderado
+					orm.Apoderado lormApoderado = orm.ApoderadoDAO.createApoderado();
+					// Asignar persona a apoderado
 					lormApoderado.setPersona(lormPersona);
-					// Guardar secretaria
+					// Guardar apoderado
 					orm.ApoderadoDAO.save(lormApoderado);
 					return "Se ingreso nuevo apoderado correctamente";
 				} else {

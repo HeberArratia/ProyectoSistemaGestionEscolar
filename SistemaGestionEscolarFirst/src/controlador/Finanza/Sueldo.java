@@ -11,39 +11,45 @@ public class Sueldo {
 	private int mes;
 	private int cantCursos;
 	private int estadoPsgo;
-
-	public void obtenerListSueldoProf() {
-		// TODO - implement Sueldo.obtenerListSueldoProf
-		throw new UnsupportedOperationException();
-	}
-
+	
+	/**
+	 * Metodo que permite registrar el sueldo de un profesor
+	 * @param rutProf a quien se le registra el pago de su sueldo
+	 * @param rutAdm quien registra el pago
+	 * @param mes en que se registra el pago
+	 * @return mensaje de confirmacion
+	 */
 	public static String registrarSueldoProf(String rutProf, String rutAdm, int mes) {
 		// se valida si el mes es correcto
 				if (mes < 1 || mes > 10) {
 					return "mes invalido";
 				}
 				try {
-					// creacion de condicion de busqueda
-					String condicionAdmin = "persona.rut='" + rutAdm + "'";
-					orm.Jefeadministracion lormJefeAdm = orm.JefeadministracionDAO.loadJefeadministracionByQuery(condicionAdmin, null);
+					// Condicion de busqueda (rut de persona)
+					String queryJefeAdm = "persona.rut='" + rutAdm + "'";
+					// Variable que almacena el jefe de administracion con la condicion entregada
+					orm.Jefeadministracion lormJefeAdm = orm.JefeadministracionDAO.loadJefeadministracionByQuery(queryJefeAdm, null);
 					// si existe el jefe de administracion
 					if (lormJefeAdm != null) {
-						//se crea una condicion de busqueda del profesor ingresando el rut
-						String rutProfesor = "persona.rut='" + rutProf + "'";
-						orm.Profesor lormProfesor = orm.ProfesorDAO.loadProfesorByQuery(rutProfesor, null);
-						// si el profesor existe
+						//se crea una condicion de busqueda del profesor 
+						String queryProfesor = "persona.rut='" + rutProf + "'";
+						// Variable que almacena al profesor con la condicion entregada
+						orm.Profesor lormProfesor = orm.ProfesorDAO.loadProfesorByQuery(queryProfesor, null);
+						// Si el profesor existe
 						if (lormProfesor != null) {
-							System.out.println("hola1");
-							// se crea la condicion de busqueda que tiene el id del profesor y el mes de pago
-							String condicionprof = "profesor.id='" + lormProfesor.getId() + "'"+ " and mes='"+mes+"'";
-							orm.Sueldo lormSueldo = orm.SueldoDAO.loadSueldoByQuery(condicionprof, null);
-							//orm.Sueldo_profesor lormSueldo_profesor = orm.Sueldo_profesorDAO.loadSueldo_profesorByQuery(condicionprof, null);
-							System.out.println("Nombre: " + lormSueldo.getProfesor().getPersona().getNombre() + "mes: " + lormSueldo.getMes());
+							// Se crea la condicion de busqueda del sueldo (id profesor y mes)
+							String querySueldo = "profesor.id='" + lormProfesor.getId() + "'"+ " and mes='"+mes+"'";
+							// Variable que almacena el sueldo con la condicion entregada
+							orm.Sueldo lormSueldo = orm.SueldoDAO.loadSueldoByQuery(querySueldo, null);
+							// Si el profesor tiene cursos se puede proceder
 							if(Curso.calcularCantCursos(rutProf)!=0){
-								 
+								// Si el sueldo no se encuentra pagado se puede proceder
 								if (lormSueldo.getEstadoPago()==0){
+									// El estado de pago cambia a pagado (1)
 									lormSueldo.setEstadoPago(1);
+									// Se asigna el jefe de administracion quien paga el sueldo
 									lormSueldo.setJefeadministracion(lormJefeAdm);
+									// Se guarda el sueldo
 									orm.SueldoDAO.save(lormSueldo);
 									return "Sueldo pagado exitosamente";
 								}
@@ -62,9 +68,46 @@ public class Sueldo {
 			}
 				return null;
 	}
-
-	public void consSueldoProf() {
-		
+	
+	/**
+	 * Metodo que permite obtener todos los sueldos de un profesor
+	 * @param rutProf a quien se desea obtener los sueldos
+	 * @return
+	 */
+	public static String[][] obtenerListSueldoProf(String rutProf) {
+		try {
+			//Condicion de busqueda del profesor (rut profesor)
+			String queryProfesor = "persona.rut='" + rutProf + "'";
+			//Variable que almacena el profesor con la condicion entregada
+			orm.Profesor lormProfesor = orm.ProfesorDAO.loadProfesorByQuery(
+					queryProfesor, null);
+			// Si el profesor existe se puede proceder
+			if(lormProfesor!=null){
+			//Condicion de busqueda del sueldo (objeto profesor)
+			String querySueldo = "profesor='" + lormProfesor+ "'";
+			//Arreglo que almacena los sueldos del profesor con la condicion entregada
+			orm.Sueldo[] ormSueldos = orm.SueldoDAO.listSueldoByQuery(querySueldo, null);
+			//Obtenemos el largo del arreglo
+			int length =/* Math.min(*/ormSueldos.length/*, ROW_COUNT)*/;
+			//Entregamos a la matriz el largo de filas y columnas
+			String datos[][] = new String[length][5];
+			//Almacenamos todos los sueldos
+			for (int i = 0; i < length; i++) {
+				datos[i][0]=ormSueldos[i].getProfesor().getPersona().getNombre()+" "+ormSueldos[i].getProfesor().getPersona().getApellido();
+				datos[i][1]=""+ormSueldos[i].getMes();
+				datos[i][2]=""+ormSueldos[i].getCantCursos();
+				datos[i][3]=""+ormSueldos[i].getMonto();
+				datos[i][4]=""+ormSueldos[i].getEstadoPago();
+			}
+			//Retornamos los sueldos en la matriz
+			return datos;
+			}
+			return null;
+		} catch (PersistentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

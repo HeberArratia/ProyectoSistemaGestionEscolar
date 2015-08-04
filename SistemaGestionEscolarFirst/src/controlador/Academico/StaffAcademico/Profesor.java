@@ -37,14 +37,15 @@ public class Profesor extends Persona {
 			orm.Persona lormPersonaBuscar = orm.PersonaDAO.loadPersonaByQuery(queryPersona, null);
 			// Si la persona no existe se puede proceder
 			if (lormPersonaBuscar == null) {
-				// se crea un objeto orm.Persona y se cambian sus atributos por los de la Persona ingresada por parametros
+				// se crea una persona y se asignan sus atributos correspondientes
 				orm.Persona lormPersona = orm.PersonaDAO.createPersona();
 				lormPersona.setNombre(nuevaPer.getNombre());
 				lormPersona.setApellido(nuevaPer.getApellido());
 				lormPersona.setRut(nuevaPer.getRut());
 				lormPersona.setPass(nuevaPer.getPass());
+				// Guardamos la nueva persona
 				orm.PersonaDAO.save(lormPersona);
-				//Una vez guardada la persona se procede a crear un objeto profesor al cual se le remplaza su objeto padre por el recien guardado
+				//Una vez guardada la persona se procede a crear un nuevo profesor 
 				orm.Profesor lormProfesor = orm.ProfesorDAO.createProfesor();
 				lormProfesor.setPersona(lormPersona);
 				orm.ProfesorDAO.save(lormProfesor);
@@ -57,7 +58,7 @@ public class Profesor extends Persona {
 					lormSueldo.setEstadoPago(0);
 					lormSueldo.setMes(i+1);
 					lormSueldo.setMonto(0);
-					
+					//Se guarda el sueldo
 					orm.SueldoDAO.save(lormSueldo);
 				}
 				
@@ -78,29 +79,40 @@ public class Profesor extends Persona {
 	}
 
 	
+	/**
+	 * Metodo que permite buscar un profesor por medio de su rut
+	 * @param rut del profesor
+	 * @return
+	 */
 	public static String[] buscarProfesor(String rut) {
-		String[] datos= new String[4];
-		String rutProfesor = "persona.rut='" + rut + "'";
-			// se crea una variable de busqueda
-			// si el profesor existe
-			orm.Profesor lormProfesor;
-			try {
-				lormProfesor = orm.ProfesorDAO.loadProfesorByQuery(rutProfesor, null);
-				if (lormProfesor != null) {
-					datos[0]=""+lormProfesor.getPersona().getNombre();
-					datos[1]=""+lormProfesor.getPersona().getApellido();
-					datos[2]=""+lormProfesor.getPersona().getRut();
-					datos[3]=""+Curso.calcularCantCursos(rut);
-					return datos;
-				}else{
-					datos[0]="Persona No Encontrada";
-					return datos;
-				}
-			} catch (PersistentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		//Arreglo que almacena los datos del profesor
+		String[] datos = new String[3];
+		//Condicion de busqueda del profesor
+		String queryProfesor = "persona.rut='" + rut + "'";
+		try {
+			// Almacenamos en la variable el profesor con la condicion entregada
+			orm.Profesor lormProfesor = orm.ProfesorDAO.loadProfesorByQuery(queryProfesor,null);
+			// Obtenemos la cantidad de cursos del profesor
+			int cant = Curso.calcularCantCursos(rut);
+			// Si el profesor existe se puede proceder
+			if (lormProfesor != null) {
+				// Se almacenan los datos del profesor
+				datos[0] = "" + lormProfesor.getPersona().getNombre() + " " + lormProfesor.getPersona().getApellido();
+				datos[1] = "" + lormProfesor.getPersona().getRut();
+				datos[2] = "" + cant;
+				System.out.println("|nombre: " + datos[0] + " |Apellido: "
+						+ datos[1] + " |Rut: " + datos[2] + "|Cursos: "
+						+ datos[3]);
+				// Retornamos los datos del profesor
+				return datos;
+			} else {
+				return null;
 			}
-			
+		} catch (PersistentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		return null;
 	}
 
@@ -115,23 +127,23 @@ public class Profesor extends Persona {
 	public static String registrarPromedio(String rutEst, int idCurso, double promedio,String rutProfesor) {
 		try {
 			// Condicion de busqueda del estudiante (rut persona)
-			String conEstudiante = "persona.rut='" + rutEst+ "'";
+			String queryEstudiante = "persona.rut='" + rutEst+ "'";
 			// Se almacena en la variable el estudiante con la condicion entregada
-			orm.Estudiante lormEstudiante = orm.EstudianteDAO.loadEstudianteByQuery(conEstudiante, null);
+			orm.Estudiante lormEstudiante = orm.EstudianteDAO.loadEstudianteByQuery(queryEstudiante, null);
 			// Si el estudiante existe se puede proceder
 			if (lormEstudiante!=null){
 				//Buscar la relación curso estudiante con el id del estudiante y id curso
-				String condEstCurso = "estudiante='" + lormEstudiante+ "'"+" and curso.id='"+idCurso+"'";
+				String queryEstCurso = "estudiante='" + lormEstudiante+ "'"+" and curso.id='"+idCurso+"'";
 				// Variable que almacena estudiante_curso con la condicion entregada
-				orm.Estudiante_curso lormEstudiante_curso = orm.Estudiante_cursoDAO.loadEstudiante_cursoByQuery(condEstCurso, null);
+				orm.Estudiante_curso lormEstudiante_curso = orm.Estudiante_cursoDAO.loadEstudiante_cursoByQuery(queryEstCurso, null);
 				// Si la relacion existe se puede proceder
 				if(lormEstudiante_curso!=null){
 					// Si el promedio es igual nulo se puede proceder a registrarlo
 					if (lormEstudiante_curso.getPromedio()==null){
 						// Condicion de busqueda de curso_profesor (id del curso)
-						String condicionCurso_profesor = "curso.id='" + idCurso + "'";
+						String queryCurso_profesor = "curso.id='" + idCurso + "'";
 						// Se almacena en la variable el curso_profesor con la condicion entregada
-						orm.Curso_profesor lormCurso_profesor = orm.Curso_profesorDAO.loadCurso_profesorByQuery(condicionCurso_profesor, null);
+						orm.Curso_profesor lormCurso_profesor = orm.Curso_profesorDAO.loadCurso_profesorByQuery(queryCurso_profesor, null);
 						// Si el profesor es el mismo al cual se le asigno el curso se puede proceder
 						if(lormCurso_profesor.getProfesor().getPersona().getRut().equals(rutProfesor)){
 							// Se asigna el promedio 
@@ -164,23 +176,23 @@ public class Profesor extends Persona {
 	public static String registrarAsistencia(String rutEst, int idCurso, double asistencia,String rutProfesor) {
 		try {
 			// Condicion de busqueda del estudiante (rut persona)
-			String conEstudiante = "persona.rut='" + rutEst+ "'";
+			String queryEstudiante = "persona.rut='" + rutEst+ "'";
 			// Se almacena en la variable el estudiante con la condicion entregada
-			orm.Estudiante lormEstudiante = orm.EstudianteDAO.loadEstudianteByQuery(conEstudiante, null);
+			orm.Estudiante lormEstudiante = orm.EstudianteDAO.loadEstudianteByQuery(queryEstudiante, null);
 			// Si el estudiante existe se puede proceder
 			if (lormEstudiante!=null){
 				//buscar la relación curso estudiante con el id del estudiante y id curso
-				String condEstCurso = "estudiante='" + lormEstudiante+ "'"+" and curso.id='"+idCurso+"'";
+				String queryEstCurso = "estudiante='" + lormEstudiante+ "'"+" and curso.id='"+idCurso+"'";
 				// Variable que almacena estudiante_curso con la condicion entregada
-				orm.Estudiante_curso lormEstudiante_curso = orm.Estudiante_cursoDAO.loadEstudiante_cursoByQuery(condEstCurso, null);
+				orm.Estudiante_curso lormEstudiante_curso = orm.Estudiante_cursoDAO.loadEstudiante_cursoByQuery(queryEstCurso, null);
 				// Si la relacion existe se puede proceder
 				if(lormEstudiante_curso!=null){
 					// Si el porcentaje en el curso es nulo se puede registrar
 					if (lormEstudiante_curso.getPorcAsistencia()==null){
 						//Buscar la relación curso profesor con el id del estudiante y id curso
-						String condicionCurso_profesor = "curso.id='" + idCurso + "'";
+						String queryCurso_profesor = "curso.id='" + idCurso + "'";
 						// Se almacena en la variable el curso_profesor con la condicion entregada
-						orm.Curso_profesor lormCurso_profesor = orm.Curso_profesorDAO.loadCurso_profesorByQuery(condicionCurso_profesor, null);
+						orm.Curso_profesor lormCurso_profesor = orm.Curso_profesorDAO.loadCurso_profesorByQuery(queryCurso_profesor, null);
 						// Si el profesor es el mismo al cual se le asigno el curso se puede proceder
 						if(lormCurso_profesor.getProfesor().getPersona().getRut().equals(rutProfesor)){
 							// Se asigna la asistencia
