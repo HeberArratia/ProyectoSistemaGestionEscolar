@@ -3,7 +3,11 @@ package controlador.Finanza;
 import org.orm.PersistentException;
 
 import controlador.Academico.Curso;
-
+/**
+ * 
+ * @author heberarratia
+ *
+ */
 public class Mensualidad {
 
 	private int mes;
@@ -34,6 +38,12 @@ public class Mensualidad {
 				orm.Estudiante lormEstudiante = orm.EstudianteDAO.loadEstudianteByQuery(queryEstudiante, null);			
 				//Si el estudiante existe se puede proceder
 				if (lormEstudiante != null) {
+					// Condicion de busqueda de la matricula
+					String queryMatricula = "estudiante='" + lormEstudiante + "'";
+					//Se almacena en la variable matricula con condicion entregada
+					orm.Matricula lormMatricula = orm.MatriculaDAO.loadMatriculaByQuery(queryMatricula, null);
+					// Si el estado de matricula se encuentra pagado (1) se puede proceder
+					if (lormMatricula.getEstadoMatricula() == 1) {
 					// Se crea una condicion de busqueda de mensualidad (estudiante y mes)
 					String queryMensualidad = "estudiante='" + lormEstudiante + "' " + " and mes='"+mes+"'";
 					// Se almacena en la variable mensualidad con la condicion entregada
@@ -50,11 +60,12 @@ public class Mensualidad {
 						// Se asigna el monto pagado
 						lormMensualidad.setMonto(cant*10000);
 						orm.MensualidadDAO.save(lormMensualidad);
-						return "se registro exitosamente";
+						return "Se registro pago exitosamente";
 						}
-						return "El estudiante no tiene cursos, no podemos realizar el pago.";
+						return "El estudiante no tiene cursos";
 					}
 					return "La mensualidad se encuentra pagada";
+				} return "Primero debe cancelar la matricula";
 				}
 				return "El estudiante no existe";
 			}
@@ -84,6 +95,8 @@ public class Mensualidad {
 		    	orm.Mensualidad[] ormMensualidad = orm.MensualidadDAO.listMensualidadByQuery(queryMensualidad, null);
 				//Obtenemos el largo del arreglo
 		    	int length =/* Math.min(*/ormMensualidad.length/*, ROW_COUNT)*/;
+		    	// Si el largo del arreglo es mayor a cero podemos continuar
+		    	if(length>0){
 		    	// Creamos la datos con la cantidad de filas del largo del arreglo y cuatro columnas
 				datos=new String[length][4];
 				for (int i = 0; i < length; i++) {
@@ -99,6 +112,7 @@ public class Mensualidad {
 				}
 				// Retornamos la datos
 				return datos;
+		    	}
 		} 
 		} catch (PersistentException e) {
 			// TODO Auto-generated catch block

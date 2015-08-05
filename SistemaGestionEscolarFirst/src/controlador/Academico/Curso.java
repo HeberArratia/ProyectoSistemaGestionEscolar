@@ -1,6 +1,8 @@
 package controlador.Academico;
 
 import org.orm.PersistentException;
+
+import controlador.Finanza.Sueldo;
 /**
  * 
  * @author heberarratia
@@ -20,6 +22,44 @@ public class Curso {
 	public Curso(String nombreCurso) {
 		super();
 		this.nombreCurso = nombreCurso;
+	}
+	
+	/**
+	 * Metodo que permite crear un nuevo curso especificado por paramatro
+	 * 
+	 * @param nuevoCurso a crear
+	 * @param rutJefeAdm quien crea el curso
+	 * @return string de confirmacion
+	 */
+	public static String crearCurso(String nombreCurso, String rutJefeAdm) {
+		try {
+			// Condicion de busqueda de la persona (rut persona)
+			String queryPersona= "persona.rut='"+rutJefeAdm+"'";
+			// Se almacena en la variable el jefe de administracion con la condicion entregada
+			orm.Jefeadministracion lormJefeAdm = orm.JefeadministracionDAO.loadJefeadministracionByQuery(queryPersona, null);
+			// Si el jefe de administracion existe se puede proceder
+			if (lormJefeAdm!=null){
+				// Se crea un nuevo curso
+				orm.Curso lormCurso = orm.CursoDAO.createCurso();
+				// Se asigna el nombre del curso
+				lormCurso.setNombreCurso(nombreCurso);
+				// Se asigna el jefe de administracion quien crea el curso
+				lormCurso.setJefeadministracion(lormJefeAdm);
+				// Se asigna un estado de curso activo (1)
+				lormCurso.setEstadocurso(1);
+				// Se asignan 40 cupos
+				lormCurso.setCupos(40);
+				// Se guarda el curso
+				orm.CursoDAO.save(lormCurso);
+				// Se retorna un mensaje de confirmacion
+				return "Se creo el curso exitosamente";
+			}
+			return "No existe jefe de administracion";		
+		} catch (PersistentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/**
@@ -51,52 +91,24 @@ public class Curso {
 						lormCurso.setORM_Director(lormDirector);
 						// Se guardan los cambios
 						orm.CursoDAO.save(lormCurso);
+						//Actualizar sueldo del profesor que imparte el curso
+						// Condicion de busqueda en Curso_profesor (curso)
+						String queryCurso_profesor = "curso='"+lormCurso+"'";
+						//Asignamos a la variable la relacion curso profesor con la condicion entregada
+						orm.Curso_profesor lormCurso_profesor = orm.Curso_profesorDAO.loadCurso_profesorByQuery(queryCurso_profesor, null);
+						// Si la relacion existe se puede proceder
+						if (lormCurso_profesor!=null){
+							//Se actualizan los sueldos
+							Sueldo.actualizarSueldos(lormCurso_profesor.getProfesor());
+						}
 						// Se retorna un mensaje de confirmacion
-						return "Curso desactivado Exitosamente";
+						return "Curso desactivado exitosamente";
 					}
-					return "Curso se encuentra Desactivado";
+					return "Curso se encuentra desactivado";
 				}
 				return "Curso no existente";
 			} 
 			return "No existe el director";
-		} catch (PersistentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	/**
-	 * Metodo que permite crear un nuevo curso especificado por paramatro
-	 * 
-	 * @param nuevoCurso a crear
-	 * @param rutJefeAdm quien crea el curso
-	 * @return string de confirmacion
-	 */
-	public static String crearCurso(Curso nuevoCurso, String rutJefeAdm) {
-		try {
-			// Condicion de busqueda de la persona (rut persona)
-			String queryPersona= "persona.rut='"+rutJefeAdm+"'";
-			// Se almacena en la variable el jefe de administracion con la condicion entregada
-			orm.Jefeadministracion lormJefeAdm = orm.JefeadministracionDAO.loadJefeadministracionByQuery(queryPersona, null);
-			// Si el jefe de administracion existe se puede proceder
-			if (lormJefeAdm!=null){
-				// Se crea un nuevo curso
-				orm.Curso lormCurso = orm.CursoDAO.createCurso();
-				// Se asigna el nombre del curso
-				lormCurso.setNombreCurso(nuevoCurso.getNombreCurso());
-				// Se asigna el jefe de administracion quien crea el curso
-				lormCurso.setJefeadministracion(lormJefeAdm);
-				// Se asigna un estado de curso activo (1)
-				lormCurso.setEstadocurso(1);
-				// Se asignan 40 cupos
-				lormCurso.setCupos(40);
-				// Se guarda el curso
-				orm.CursoDAO.save(lormCurso);
-				// Se retorna un mensaje de confirmacion
-				return "Se creo el curso exitosamente";
-			}
-			return "No existe Director";		
 		} catch (PersistentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -152,31 +164,9 @@ public class Curso {
 									lormCurso_profesor.setProfesor(lormProfesor);
 									//Guardamos sueldo_profesor
 									orm.Curso_profesorDAO.save(lormCurso_profesor);
-									// Condicion de busqueda de sueldoprofesor (id profesor)
-									String querySueldoProf = "profesor.id='" + lormProfesor.getId() + "'";
-									// Arreglo que almacena los sueldoprofesor con la condicion entregada
-									orm.Sueldo[] ormSueldos = orm.SueldoDAO.listSueldoByQuery(querySueldoProf, null);
-									// Lo siguiente permite actualizar la cantidad de cursos y monto de los 10 sueldos del profesor
-									// Obtenemos el largo del arreglo
-									int length = ormSueldos.length;
-									// Obtenemos la cantidad de curso que tiene asignado el profesor
-									int cant=calcularCantCursos(rutProfe);
-									// Bucle que recorre todos los sueldos del profesor
-									for (int i = 0; i < length; i++) {
-										// Si el sueldo no se encuentra pagado se puede proceder
-										if(ormSueldos[i].getEstadoPago()==0){	
-											// Si la cantidad de curso del profesor es distinta de cero
-											if(cant!=0){
-											// Se asigna la cantidad de curso
-											ormSueldos[i].setCantCursos(cant);
-											// Se asigna el monto que se debe pogar
-											ormSueldos[i].setMonto(ormSueldos[i].getCantCursos()*100000);
-											// Se guarda cada sueldo
-											orm.SueldoDAO.save(ormSueldos[i]);
-											}
-										}	
-									}
-									return "profesor asignado";
+									// Se actualizan los sueldos del profesor
+									Sueldo.actualizarSueldos(lormProfesor);			
+									return "Profesor asignado";
 								}
 								return "El curso ya tiene asignado un profesor";
 							}
@@ -205,7 +195,7 @@ public class Curso {
 	 * @param rutProfesor quien inscribe al estudiante en el curso
 	 * @return string de confirmacion
 	 */
-	public static String inscribirEstudiantes(int idCurso, String rutEstudiante, String rutProfesor) {
+	public static String inscribirEstudiante(int idCurso, String rutEstudiante, String rutProfesor) {
 		try {
 			// Condicion de busqueda del estudiante (rut del estudiante)
 			String queryEstudiante = "persona.rut='" + rutEstudiante + "'";
@@ -228,7 +218,7 @@ public class Curso {
 						// Se almacena en la variable el curso_profesor con la condicion entregada
 						orm.Curso_profesor lormCurso_profesor = orm.Curso_profesorDAO.loadCurso_profesorByQuery(queryCurso_profesor, null);
 						// Si el profesor que inscribe al estudiante es el mismo al que se le asigno el curso se puede proceder
-						if(lormCurso_profesor.getProfesor().getPersona().getRut().equals(rutProfesor)){
+						if(lormCurso_profesor!=null && lormCurso_profesor.getProfesor().getPersona().getRut().equals(rutProfesor)){
 							// Creamos un nuevo estudiante_curso
 							orm.Estudiante_curso lormEstudiante_curso = orm.Estudiante_cursoDAO.createEstudiante_curso();
 							// Almacenamos el curso

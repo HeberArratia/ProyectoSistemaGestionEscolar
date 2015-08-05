@@ -2,6 +2,7 @@ package controlador.Academico.StaffAcademico;
 
 import org.orm.PersistentException;
 
+import controlador.Academico.Curso;
 import controlador.Persona.*;
 /**
  * 
@@ -25,8 +26,9 @@ public class Estudiante extends Persona {
 	 * @param rutApoderado quien es apoderado del estudiante
 	 * @return string de confirmacion
 	 */
-	public static String agregarNuevoEstudiante(Persona nuevaPersona, String rutApoderado) {
+	public static String agregarNuevoEstudiante(String nombre,String apellido,String rut,String pass, String rutApoderado) {
 		try {
+			Persona nuevaPersona = new Persona(nombre,apellido,rut,pass);
 			// Se validan los atributos de la persona
 			if (nuevaPersona.validarAtributos()) {
 				// Condicion de busqueda del apoderado (rut de la persona)
@@ -120,7 +122,7 @@ public class Estudiante extends Persona {
 				datos[0]=""+lormEstudiante.getPersona().getNombre() + " " + lormEstudiante.getPersona().getApellido();
 				datos[1]=""+lormEstudiante.getPersona().getRut();
 				datos[2]=""+lormEstudiante.getMatricula().getEstadoMatricula();
-				datos[3]=""+lormEstudiante.getApoderado().getPersona().getNombre() + " " + lormEstudiante.getApoderado().getPersona().getNombre();
+				datos[3]=""+lormEstudiante.getApoderado().getPersona().getNombre() + " " + lormEstudiante.getApoderado().getPersona().getApellido();
 				System.out.println("|Nombre: "+datos[0]+" |Rut: "+datos[1]+" |Matricula: "+datos[2]+" |Apoderado: "+datos[3]);
 			//Retornamos el arreglo de datos	
 			return datos;
@@ -153,9 +155,9 @@ public class Estudiante extends Persona {
 			// Si el estudiante existe se puede proceder
 			if(lormEstudiante!=null){
 			//Condicion de busqueda de estudiante_curso (estudiante)
-			String condicionEst_curso = "estudiante='" + lormEstudiante	+ "'";
+			String queryCurEst= "estudiante='"+lormEstudiante+ "'" + " and curso.estadocurso='" + 1 + "'";
 			// datos que almacena las relaciones estudiante_curso con la condicion entregada
-			ormEstudiante_cursos = orm.Estudiante_cursoDAO.listEstudiante_cursoByQuery(condicionEst_curso, null);
+			ormEstudiante_cursos = orm.Estudiante_cursoDAO.listEstudiante_cursoByQuery(queryCurEst, null);
 			// Se almacena el largo del datos
 			int length = ormEstudiante_cursos.length;	
 				for (int i = 0; i < length; i++) {
@@ -195,15 +197,15 @@ public class Estudiante extends Persona {
 		orm.Estudiante_curso[] ormEstudiante_cursos = null;
 		try {			
 			//Condicion de busqueda del estudiante (rut del estudiante)
-			String queryEstudiante = "persona.rut='" + rutEstudiante	+ "'";
+			String queryEstudiante = "persona.rut='" + rutEstudiante + "'";
 			// Se almacena en una variable el estudiante con la condicion entregada
 			orm.Estudiante lormEstudiante = orm.EstudianteDAO.loadEstudianteByQuery(queryEstudiante, null);
 			// Si el estudiante existe se puede proceder
 			if(lormEstudiante!=null){
 				//Condicion de busqueda de la relacion estudiante_curso (estudiante)
-				String queryEst_curso = "estudiante='" + lormEstudiante	+ "'";
+				String queryCurEst= "estudiante='"+lormEstudiante+ "'" + " and curso.estadocurso='" + 1 + "'";
 				// datos que almacena el estudiante_curso con la condicion entregada
-				ormEstudiante_cursos = orm.Estudiante_cursoDAO.listEstudiante_cursoByQuery(queryEst_curso, null);
+				ormEstudiante_cursos = orm.Estudiante_cursoDAO.listEstudiante_cursoByQuery(queryCurEst, null);
 				// Se almacena el largo del datos
 			    int length = ormEstudiante_cursos.length;
 				for (int i = 0; i < length; i++) {
@@ -239,6 +241,7 @@ public class Estudiante extends Persona {
 			lormEstudiante = orm.EstudianteDAO.loadEstudianteByQuery(queryEstudiante, null);
 			// Si el estudiante existe se puede proceder
 			if (lormEstudiante!= null){
+				if(Curso.calcularCantCursos(lormEstudiante.getPersona().getRut())!=0){
 				//Obtenemos promedio del estudiante
 				double promedio = obtenerPromedioGeneral(rutEstudiante);
 				// Si el promedio no es cero se puede proceder
@@ -247,8 +250,9 @@ public class Estudiante extends Persona {
 					double asistencia = obtenerPorcentajeAsistencia(rutEstudiante);
 					//Retornamos como string el promedio y asistencia del estudiante
 					return "El promedio es: " + promedio + " La asistencia es: " + asistencia;
-				} return "Faltan promedios en curso del estudiante";			
-			} return "Estudiante no existe";
+				} return "Faltan promedios en curso del estudiante";	
+				} return "El estudiante no tiene cursos";
+			} return "El estudiante no existe";
 		} catch (PersistentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

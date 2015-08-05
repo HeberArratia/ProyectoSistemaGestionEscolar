@@ -1,14 +1,17 @@
 package controlador.Persona;
 
+import org.orm.PersistentException;
+
+/**
+ * 
+ * @author heberarratia
+ *
+ */
 public class Persona {
-
-	
-
 	private String nombre;
 	private String apellido;
 	private String rut;
 	private String pass;
-	
 	
 	/**
 	 * 
@@ -134,5 +137,45 @@ public class Persona {
 			return false;
 		}
 	}
-
+	
+	/**
+	 * Metodo que permite verificar si la persona existe y a que perfil corresponde
+	 * @param rut
+	 * @param pass
+	 * @return string de confirmacion
+	 */
+	public static String login(String rut, String pass){
+		try {
+			// Condicion de busqueda (rut persona)
+			String condicion= "persona.rut='"+rut+ "'" + " and persona.pass='" + pass + "'";
+			// Se almacena en variable cada objeto con la condicion entregada		
+			orm.Profesor lormProfesor = orm.ProfesorDAO.loadProfesorByQuery(condicion, null);
+			orm.Estudiante lormEstudiante = orm.EstudianteDAO.loadEstudianteByQuery(condicion, null);
+			orm.Apoderado lormApoderado = orm.ApoderadoDAO.loadApoderadoByQuery(condicion, null);
+			orm.Director lormDirector = orm.DirectorDAO.loadDirectorByQuery(condicion, null);
+			orm.Jefeadministracion lormJefeadministracion = orm.JefeadministracionDAO.loadJefeadministracionByQuery(condicion, null);
+			orm.Secretaria lormSecretaria = orm.SecretariaDAO.loadSecretariaByQuery(condicion, null);
+			// Si existe alguno de los perfiles se retorna como string, de lo contrario se retorna error
+			if (lormProfesor!=null){
+				return "Profesor";
+			} else if (lormEstudiante!=null){
+				return "Estudiante";
+			} else if (lormApoderado!=null){
+				return "Apoderado";
+			} else if (lormDirector!=null){
+				return "Director";
+			} else if (lormJefeadministracion!=null){
+				return "JefeAdm";
+			} else if (lormSecretaria!=null){
+				return "Secretaria";
+			} else {
+				return "Error";
+			}
+		} catch (PersistentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 }

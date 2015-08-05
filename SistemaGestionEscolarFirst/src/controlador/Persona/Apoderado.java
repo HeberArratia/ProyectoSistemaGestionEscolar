@@ -1,7 +1,11 @@
 package controlador.Persona;
 
 import org.orm.PersistentException;
-
+/**
+ * 
+ * @author heberarratia
+ *
+ */
 public class Apoderado extends Persona {
 
 	public Apoderado(String nombre, String apellido, String rut) {
@@ -16,10 +20,11 @@ public class Apoderado extends Persona {
 	/**
 	 * Metodo que permite agregar un nuevo apoderado
 	 * @param nuevaPersona
-	 * @return string de confirmacion
+	 * @return 
 	 */
-	public static String agregarNuevoApoderado(Persona nuevaPersona) {
+	public static String agregarNuevoApoderado(String nombre,String apellido,String rut,String pass) {
 		try {
+			Persona nuevaPersona = new Persona(nombre,apellido,rut,pass);
 			if (nuevaPersona.validarAtributos()) {
 				// Se establece una condicion de busqueda
 				String condicionPersona = "rut='" + nuevaPersona.getRut() + "'";

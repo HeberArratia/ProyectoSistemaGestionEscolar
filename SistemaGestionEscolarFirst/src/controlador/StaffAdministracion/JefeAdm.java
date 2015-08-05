@@ -3,7 +3,11 @@ package controlador.StaffAdministracion;
 import org.orm.PersistentException;
 
 import controlador.Persona.*;
-
+/**
+ * 
+ * @author heberarratia
+ *
+ */
 public class JefeAdm extends Persona {
 	
 	
@@ -21,8 +25,9 @@ public class JefeAdm extends Persona {
 	 * @param nuevaPer
 	 * @return string de confirmacion
 	 */
-	public static String agregarNuevoJefeAdm(Persona nuevaPer) {
+	public static String agregarNuevoJefeAdm(String nombre, String apellido,String rut,String pass) {
 		try {
+			Persona nuevaPer = new Persona(nombre,apellido,rut,pass);
 			// Se validan los atributos de la nueva persona
 			if (nuevaPer.validarAtributos()) {
 				// Se establece una condicion de busqueda 

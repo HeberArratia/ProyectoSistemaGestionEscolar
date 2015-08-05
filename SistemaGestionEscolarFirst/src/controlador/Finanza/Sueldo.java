@@ -3,7 +3,11 @@ package controlador.Finanza;
 import org.orm.PersistentException;
 
 import controlador.Academico.Curso;
-
+/**
+ * 
+ * @author heberarratia
+ *
+ */
 public class Sueldo {
 	private static final int ROW_COUNT = 100;
 
@@ -110,4 +114,40 @@ public class Sueldo {
 		return null;
 	}
 
+	/**
+	 * Metodo que permite actualizar los atributos de los sueldos de un profesor
+	 * @param profesor
+	 */
+	public static void actualizarSueldos(orm.Profesor profesor){
+		try {
+			// Condicion de busqueda de sueldoprofesor (id profesor)
+			String querySueldo = "profesor.id='" + profesor.getId() + "'";
+			// Arreglo que almacena los sueldoprofesor con la condicion entregada
+			orm.Sueldo[] ormSueldos;
+			ormSueldos = orm.SueldoDAO.listSueldoByQuery(querySueldo, null);
+			// Lo siguiente permite actualizar la cantidad de cursos y monto de los 10 sueldos del profesor
+			// Obtenemos el largo del arreglo
+			int length = ormSueldos.length;
+			// Obtenemos la cantidad de curso que tiene asignado el profesor
+			int cant=Curso.calcularCantCursos(profesor.getPersona().getRut());
+			// Bucle que recorre todos los sueldos del profesor
+			for (int i = 0; i < length; i++) {
+				// Si el sueldo no se encuentra pagado se puede proceder
+				if(ormSueldos[i].getEstadoPago()==0){	
+					// Si la cantidad de curso del profesor es distinta de cero
+					if(cant!=0){
+					// Se asigna la cantidad de curso
+					ormSueldos[i].setCantCursos(cant);
+					// Se asigna el monto que se debe pogar
+					ormSueldos[i].setMonto(ormSueldos[i].getCantCursos()*100000);
+					// Se guarda cada sueldo
+					orm.SueldoDAO.save(ormSueldos[i]);
+					}
+				}	
+			}
+		} catch (PersistentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+	}
 }

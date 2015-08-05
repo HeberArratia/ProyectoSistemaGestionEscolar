@@ -100,9 +100,8 @@ public class Profesor extends Persona {
 				datos[0] = "" + lormProfesor.getPersona().getNombre() + " " + lormProfesor.getPersona().getApellido();
 				datos[1] = "" + lormProfesor.getPersona().getRut();
 				datos[2] = "" + cant;
-				System.out.println("|nombre: " + datos[0] + " |Apellido: "
-						+ datos[1] + " |Rut: " + datos[2] + "|Cursos: "
-						+ datos[3]);
+				System.out.println("|nombre: " + datos[0] + " |Rut: "
+						+ datos[1] + " |Cantidad cursos: " + datos[2]);
 				// Retornamos los datos del profesor
 				return datos;
 			} else {
@@ -145,7 +144,7 @@ public class Profesor extends Persona {
 						// Se almacena en la variable el curso_profesor con la condicion entregada
 						orm.Curso_profesor lormCurso_profesor = orm.Curso_profesorDAO.loadCurso_profesorByQuery(queryCurso_profesor, null);
 						// Si el profesor es el mismo al cual se le asigno el curso se puede proceder
-						if(lormCurso_profesor.getProfesor().getPersona().getRut().equals(rutProfesor)){
+						if(lormCurso_profesor!=null && lormCurso_profesor.getProfesor().getPersona().getRut().equals(rutProfesor)){
 							// Se asigna el promedio 
 							lormEstudiante_curso.setPromedio(promedio);
 							orm.Estudiante_cursoDAO.save(lormEstudiante_curso);
@@ -194,7 +193,7 @@ public class Profesor extends Persona {
 						// Se almacena en la variable el curso_profesor con la condicion entregada
 						orm.Curso_profesor lormCurso_profesor = orm.Curso_profesorDAO.loadCurso_profesorByQuery(queryCurso_profesor, null);
 						// Si el profesor es el mismo al cual se le asigno el curso se puede proceder
-						if(lormCurso_profesor.getProfesor().getPersona().getRut().equals(rutProfesor)){
+						if(lormCurso_profesor!=null && lormCurso_profesor.getProfesor().getPersona().getRut().equals(rutProfesor)){
 							// Se asigna la asistencia
 							lormEstudiante_curso.setPorcAsistencia(asistencia);
 							// Se guarda la asistencia en la tabla
@@ -214,5 +213,7 @@ public class Profesor extends Persona {
 		}
 		return null;
 	}
+	
+	
 
 }
