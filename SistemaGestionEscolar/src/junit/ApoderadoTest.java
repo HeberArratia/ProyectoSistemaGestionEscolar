@@ -10,7 +10,7 @@ public class ApoderadoTest {
 
 	@Test
 	public void test() {
-		System.out.println(Apoderado.agregarNuevoApoderado("Marta","Cardenas","102345432","232322"));
+		System.out.println(Apoderado.agregarNuevoApoderado("Raquel","Fuentes","81234325","123222"));
 	}
 
 }

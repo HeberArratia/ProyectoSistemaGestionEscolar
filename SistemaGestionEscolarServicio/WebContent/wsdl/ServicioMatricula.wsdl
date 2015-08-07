@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://servicio" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://servicio" xmlns:intf="http://servicio" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)-->
+ <wsdl:types>
+  <schema elementFormDefault="qualified" targetNamespace="http://servicio" xmlns="http://www.w3.org/2001/XMLSchema">
+   <element name="pagarMatricula">
+    <complexType>
+     <sequence>
+      <element name="rutEstudiante" type="xsd:string"/>
+      <element name="rutSecretaria" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="pagarMatriculaResponse">
+    <complexType>
+     <sequence>
+      <element name="pagarMatriculaReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="obtenerMorososMatricula">
+    <complexType/>
+   </element>
+   <element name="obtenerMorososMatriculaResponse">
+    <complexType>
+     <sequence>
+      <element name="obtenerMorososMatriculaReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="obtenerMorososMatriculaResponse">
+
+      <wsdl:part element="impl:obtenerMorososMatriculaResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="pagarMatriculaRequest">
+
+      <wsdl:part element="impl:pagarMatricula" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="obtenerMorososMatriculaRequest">
+
+      <wsdl:part element="impl:obtenerMorososMatricula" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="pagarMatriculaResponse">
+
+      <wsdl:part element="impl:pagarMatriculaResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:portType name="ServicioMatricula">
+
+      <wsdl:operation name="pagarMatricula">
+
+         <wsdl:input message="impl:pagarMatriculaRequest" name="pagarMatriculaRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:pagarMatriculaResponse" name="pagarMatriculaResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="obtenerMorososMatricula">
+
+         <wsdl:input message="impl:obtenerMorososMatriculaRequest" name="obtenerMorososMatriculaRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:obtenerMorososMatriculaResponse" name="obtenerMorososMatriculaResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="ServicioMatriculaSoapBinding" type="impl:ServicioMatricula">
+
+      <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="pagarMatricula">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="pagarMatriculaRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="pagarMatriculaResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="obtenerMorososMatricula">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="obtenerMorososMatriculaRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="obtenerMorososMatriculaResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="ServicioMatriculaService">
+
+      <wsdl:port binding="impl:ServicioMatriculaSoapBinding" name="ServicioMatricula">
+
+         <wsdlsoap:address location="http://localhost:8080/SistemaGestionEscolarServicio/services/ServicioMatricula"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>

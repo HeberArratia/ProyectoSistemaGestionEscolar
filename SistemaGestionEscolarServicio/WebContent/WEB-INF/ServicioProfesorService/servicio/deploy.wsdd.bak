@@ -1,0 +1,41 @@
+<!-- Use this file to deploy some handlers/chains and services      -->
+<!-- Two ways to do this:                                           -->
+<!--   java org.apache.axis.client.AdminClient deploy.wsdd          -->
+<!--      after the axis server is running                          -->
+<!-- or                                                             -->
+<!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   -->
+<!--      from the same directory that the Axis engine runs         -->
+
+<deployment
+    xmlns="http://xml.apache.org/axis/wsdd/"
+    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from ServicioProfesorService WSDL service -->
+
+  <service name="ServicioProfesor" provider="java:RPC" style="wrapped" use="literal">
+      <parameter name="wsdlTargetNamespace" value="http://servicio"/>
+      <parameter name="wsdlServiceElement" value="ServicioProfesorService"/>
+      <parameter name="schemaQualified" value="http://servicio"/>
+      <parameter name="wsdlServicePort" value="ServicioProfesor"/>
+      <parameter name="className" value="servicio.ServicioProfesorSoapBindingImpl"/>
+      <parameter name="wsdlPortType" value="ServicioProfesor"/>
+      <parameter name="typeMappingVersion" value="1.2"/>
+      <operation name="buscarProfesor" qname="operNS:buscarProfesor" xmlns:operNS="http://servicio" returnQName="retNS:buscarProfesorReturn" xmlns:retNS="http://servicio" returnType="rtns:string" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="pns:rut" xmlns:pns="http://servicio" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="registrarPromedio" qname="operNS:registrarPromedio" xmlns:operNS="http://servicio" returnQName="retNS:registrarPromedioReturn" xmlns:retNS="http://servicio" returnType="rtns:string" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="pns:rutEst" xmlns:pns="http://servicio" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:idCurso" xmlns:pns="http://servicio" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:promedio" xmlns:pns="http://servicio" type="tns:double" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:rutProfesor" xmlns:pns="http://servicio" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="registrarAsistencia" qname="operNS:registrarAsistencia" xmlns:operNS="http://servicio" returnQName="retNS:registrarAsistenciaReturn" xmlns:retNS="http://servicio" returnType="rtns:string" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="pns:rutEst" xmlns:pns="http://servicio" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:idCurso" xmlns:pns="http://servicio" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:asistencia" xmlns:pns="http://servicio" type="tns:double" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:rutProfesor" xmlns:pns="http://servicio" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <parameter name="allowedMethods" value="registrarPromedio registrarAsistencia buscarProfesor"/>
+
+  </service>
+</deployment>

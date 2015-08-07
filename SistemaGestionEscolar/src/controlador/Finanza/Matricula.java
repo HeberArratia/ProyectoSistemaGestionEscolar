@@ -1,6 +1,8 @@
 package controlador.Finanza;
 
 import org.orm.PersistentException;
+
+import com.google.gson.Gson;
 /**
  * 
  * @author heberarratia
@@ -16,7 +18,7 @@ public class Matricula {
 	 * @param rutEstudiante 
 	 * @param rutSecretaria 
 	 * @param monto 
-	 * @return String[][] con los datos de los estudiantes
+	 * @return String de confirmacion
 	 */
 	public static String pagarMatricula(String rutEstudiante,
 			String rutSecretaria) {
@@ -58,11 +60,13 @@ public class Matricula {
 
 	/**
 	 * Metodo que permite obtener una lista de los estudiantes morosos en los pagos de matricula
-	 * @return String[][]
+	 * @return String
 	 */
-	public static String[][] ListMorososMatricula() {
+	public static String ListMorososMatricula() {
 		   // Matriz donde se van a guardar todos los alumnos con matricula no pagada
 			String datos[][];
+			//Instanciamos el objeto Gson
+			Gson gson = new Gson();
 		try {
 			//Condicion de busqueda de la matricula (estado de matricula no pagado (0))
 			String queryMatricula = "estadoMatricula='" + 0 + "'";
@@ -82,14 +86,15 @@ public class Matricula {
 				System.out.println("|Nombre: "+datos[i][0]+" |Rut: "+datos[i][1]+" |Deuda: "+datos[i][2]);
 				
 			}
-			//Retornamos la matriz de datos
-			return datos;
-			}
+			//Guardamos la matriz como Gson
+			String arrayDatosJson = gson.toJson(datos);
+			//Retornamos el Gson
+			return arrayDatosJson;
+			} return null;
 		} catch (PersistentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		// Se devuelve la lista del estudiantes
 		return null;
 	}
 

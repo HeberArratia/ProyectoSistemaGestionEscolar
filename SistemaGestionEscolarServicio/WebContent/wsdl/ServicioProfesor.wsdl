@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://servicio" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://servicio" xmlns:intf="http://servicio" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)-->
+ <wsdl:types>
+  <schema elementFormDefault="qualified" targetNamespace="http://servicio" xmlns="http://www.w3.org/2001/XMLSchema">
+   <element name="buscarProfesor">
+    <complexType>
+     <sequence>
+      <element name="rut" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="buscarProfesorResponse">
+    <complexType>
+     <sequence>
+      <element maxOccurs="unbounded" name="buscarProfesorReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="registrarPromedio">
+    <complexType>
+     <sequence>
+      <element name="rutEst" type="xsd:string"/>
+      <element name="idCurso" type="xsd:int"/>
+      <element name="promedio" type="xsd:double"/>
+      <element name="rutProfesor" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="registrarPromedioResponse">
+    <complexType>
+     <sequence>
+      <element name="registrarPromedioReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="registrarAsistencia">
+    <complexType>
+     <sequence>
+      <element name="rutEst" type="xsd:string"/>
+      <element name="idCurso" type="xsd:int"/>
+      <element name="asistencia" type="xsd:double"/>
+      <element name="rutProfesor" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="registrarAsistenciaResponse">
+    <complexType>
+     <sequence>
+      <element name="registrarAsistenciaReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="registrarAsistenciaRequest">
+
+      <wsdl:part element="impl:registrarAsistencia" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="registrarPromedioRequest">
+
+      <wsdl:part element="impl:registrarPromedio" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="registrarAsistenciaResponse">
+
+      <wsdl:part element="impl:registrarAsistenciaResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="buscarProfesorResponse">
+
+      <wsdl:part element="impl:buscarProfesorResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="buscarProfesorRequest">
+
+      <wsdl:part element="impl:buscarProfesor" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="registrarPromedioResponse">
+
+      <wsdl:part element="impl:registrarPromedioResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:portType name="ServicioProfesor">
+
+      <wsdl:operation name="buscarProfesor">
+
+         <wsdl:input message="impl:buscarProfesorRequest" name="buscarProfesorRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:buscarProfesorResponse" name="buscarProfesorResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="registrarPromedio">
+
+         <wsdl:input message="impl:registrarPromedioRequest" name="registrarPromedioRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:registrarPromedioResponse" name="registrarPromedioResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="registrarAsistencia">
+
+         <wsdl:input message="impl:registrarAsistenciaRequest" name="registrarAsistenciaRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:registrarAsistenciaResponse" name="registrarAsistenciaResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="ServicioProfesorSoapBinding" type="impl:ServicioProfesor">
+
+      <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="buscarProfesor">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="buscarProfesorRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="buscarProfesorResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="registrarPromedio">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="registrarPromedioRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="registrarPromedioResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="registrarAsistencia">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="registrarAsistenciaRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="registrarAsistenciaResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="ServicioProfesorService">
+
+      <wsdl:port binding="impl:ServicioProfesorSoapBinding" name="ServicioProfesor">
+
+         <wsdlsoap:address location="http://localhost:8080/SistemaGestionEscolarServicio/services/ServicioProfesor"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>

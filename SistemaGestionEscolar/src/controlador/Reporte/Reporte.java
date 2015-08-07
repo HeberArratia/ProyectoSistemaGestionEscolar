@@ -1,6 +1,8 @@
 package controlador.Reporte;
 
 import org.orm.PersistentException;
+
+import com.google.gson.Gson;
 /**
  * 
  * @author heberarratia
@@ -140,7 +142,9 @@ public class Reporte {
 	 * Metodo que permite obtener el balance ingreso y gasto en 10 meses
 	 * @return
 	 */
-	public static String[][] obtenerBalanceIngGasto() {
+	public static String obtenerBalanceIngGasto() {
+		//Instanciamos el objeto Gson
+		Gson gson = new Gson();
 		//Obtenemos los sueldos
 		int[] balanceS=balanceSueldo();
 		//Obtenemos las mensualidades
@@ -164,8 +168,10 @@ public class Reporte {
 		     totalM=0;
 		    // System.out.println(matrizBalance[i][0]+" y "+matrizBalance[i][1] +" y "+matrizBalance[i][2]);
 		}
-		//Retornamos la matriz
-		return matrizBalance;
+		//Guardamos la matriz como Gson
+		String arrayDatosJson = gson.toJson(matrizBalance);
+		//Retornamos el Gson
+		return arrayDatosJson;
 		
 	}
 	

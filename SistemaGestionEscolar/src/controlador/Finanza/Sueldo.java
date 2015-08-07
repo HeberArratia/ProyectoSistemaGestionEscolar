@@ -2,6 +2,8 @@ package controlador.Finanza;
 
 import org.orm.PersistentException;
 
+import com.google.gson.Gson;
+
 import controlador.Academico.Curso;
 /**
  * 
@@ -78,8 +80,10 @@ public class Sueldo {
 	 * @param rutProf a quien se desea obtener los sueldos
 	 * @return
 	 */
-	public static String[][] obtenerListSueldoProf(String rutProf) {
+	public static String obtenerListSueldoProf(String rutProf) {
 		try {
+			//Instanciamos el objeto Gson
+			Gson gson = new Gson();
 			//Condicion de busqueda del profesor (rut profesor)
 			String queryProfesor = "persona.rut='" + rutProf + "'";
 			//Variable que almacena el profesor con la condicion entregada
@@ -93,6 +97,7 @@ public class Sueldo {
 			orm.Sueldo[] ormSueldos = orm.SueldoDAO.listSueldoByQuery(querySueldo, null);
 			//Obtenemos el largo del arreglo
 			int length =/* Math.min(*/ormSueldos.length/*, ROW_COUNT)*/;
+			if (length>0){
 			//Entregamos a la matriz el largo de filas y columnas
 			String datos[][] = new String[length][5];
 			//Almacenamos todos los sueldos
@@ -103,10 +108,11 @@ public class Sueldo {
 				datos[i][3]=""+ormSueldos[i].getMonto();
 				datos[i][4]=""+ormSueldos[i].getEstadoPago();
 			}
-			//Retornamos los sueldos en la matriz
-			return datos;
-			}
-			return null;
+			String arrayDatosJson = gson.toJson(datos);
+			// Retornamos la datos en formato GSON
+			return arrayDatosJson;
+			}	return null;
+			}	return null;
 		} catch (PersistentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

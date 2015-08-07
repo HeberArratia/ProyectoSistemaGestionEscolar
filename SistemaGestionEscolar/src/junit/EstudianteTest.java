@@ -29,14 +29,14 @@ public class EstudianteTest {
 		assertTrue(resultado == "Se ingreso nuevo alumno correctamente");
 		// --> Aprobado*/
 		
-		//*/ OBTENER SITUACION ESTUDIANTE
+		/* OBTENER SITUACION ESTUDIANTE
 		//Verificar que no se muestre estudiante sin cursos
 		String resultado = "";
 		resultado = Estudiante.obtenerSituacionEstudiante("197652345");
 		// Resultado esperado: "El estudiante no tiene cursos"
 		assertTrue(resultado == "El estudiante no tiene cursos");
-		// --> Aprobado*/*/
-		System.out.println(Estudiante.agregarNuevoEstudiante("Heber", "Arratia", "187003105", "03060306", ""));
+		// --> Aprobado*/
+		System.out.println(Estudiante.agregarNuevoEstudiante("David", "Cartes", "183454324", "232355", "102345432"));
 		
 
 	}

@@ -28,7 +28,7 @@
 </head>
 
 <body>
-    <h1 class=""> <i class="fa fa-mortar-board fa-1x "></i> Gestión Educacional</h1>
+    <h1 class=""> <i class="fa fa-mortar-board fa-1x "></i>Sistema Gestión Escolar</h1>
     <div class="panel">
         <h3><i class="fa fa-user"></i> Apoderado</h3>
         <p><i class="fa fa-info-circle"></i> Situación estudiante:</p>

@@ -58,7 +58,7 @@
                 </button>
                 <a class="navbar-brand" href="index.jsp">
                     <i class="fa fa-mortar-board fa-1x"></i>
-                    Gestion Educacional</a>
+                    Sistema Gestión Escolar</a>
             </div>
             <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">

@@ -1,3 +1,8 @@
+<%@page import="servicio.ServicioReporteProxy"%>
+<%@page import="com.google.gson.Gson"%>
+<%@page import="com.google.gson.JsonElement"%>
+<%@page import="com.google.gson.JsonObject"%>
+<%@page import="com.google.gson.JsonParser"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -58,7 +63,7 @@
                 </button>
                 <a class="navbar-brand" href="index.jsp">
                     <i class="fa fa-mortar-board fa-1x"></i>
-                    Gestion Educacional</a>
+                    Sistema Gestión Escolar</a>
             </div>
             <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">
@@ -125,70 +130,42 @@
                     </div>
                 </div>
                 <!-- /.row -->
-
-                
-                 <div class="row">
+				<div class="row">
                     <div class="col-lg-12">
-                      
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Page</th>
-                                        <th>Visits</th>
-                                        <th>% New Visits</th>
-                                        <th>Revenue</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>/index.jsp</td>
-                                        <td>1265</td>
-                                        <td>32.3%</td>
-                                        <td>$321.33</td>
-                                    </tr>
-                                    <tr>
-                                        <td>/about.jsp</td>
-                                        <td>261</td>
-                                        <td>33.3%</td>
-                                        <td>$234.12</td>
-                                    </tr>
-                                    <tr>
-                                        <td>/sales.jsp</td>
-                                        <td>665</td>
-                                        <td>21.3%</td>
-                                        <td>$16.34</td>
-                                    </tr>
-                                    <tr>
-                                        <td>/blog.jsp</td>
-                                        <td>9516</td>
-                                        <td>89.3%</td>
-                                        <td>$1644.43</td>
-                                    </tr>
-                                    <tr>
-                                        <td>/404.jsp</td>
-                                        <td>23</td>
-                                        <td>34.3%</td>
-                                        <td>$23.52</td>
-                                    </tr>
-                                    <tr>
-                                        <td>/services.jsp</td>
-                                        <td>421</td>
-                                        <td>60.3%</td>
-                                        <td>$724.32</td>
-                                    </tr>
-                                    <tr>
-                                        <td>/blog/post.jsp</td>
-                                        <td>1233</td>
-                                        <td>93.2%</td>
-                                        <td>$126.34</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                   
-                </div>
+                    <table class="table table-bordered table-hover">
+                    	  <thead>
+                             <tr>
+                            	<th>Mes</th>
+                                <th>Ingreso</th>
+                                <th>Gasto</th>
+                                <th>Balance</th> 
+                              </tr>
+                           </thead>
+                    	<% ServicioReporteProxy reporte = new ServicioReporteProxy();
+        				Gson gson = new Gson();
+        				String json=  reporte.obtenerBalanceIngGasto();
+        	        	String[][] datos = gson.fromJson(json, String[][].class);
+                   		%>
+                   		<tbody>
+                   		<%
+						// Se reccore el arreglo y se muestra en cada celda c/u de los datos de un estudiante
+						for(int i=0;i<datos.length;i++){ %>	
+							<tr>
+								<td><%= i+1 %></td>
+  								<td><%= "$"+datos[i][0] %></td>
+  								<td><%= "$"+datos[i][1] %></td>
+  								<td><%= "$"+datos[i][2] %></td>
+							</tr>
+						<% } %>
+                   		</tbody>
+                     </table>
+                    
+                     </div>
+                </div>  
+           
+                
+               
+                
                 <!-- /.row -->
                 
 

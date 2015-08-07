@@ -42,24 +42,26 @@
 </head>
 
 <body>
-    <h1 class=""> <i class="fa fa-mortar-board fa-1x "></i> Gestión Educacional</h1>
+    <h1 class=""> <i class="fa fa-mortar-board fa-1x "></i>Sistema Gestión Escolar</h1>
     <h3>INICIA SESIÓN</h3>
     <!-- INICIO FORMULARIO -->
-    <form action="Login" class="animated fadeInUp" method="post">
+    <form action="LoginUsuario" class="animated fadeInUp" method="post">
         <div id="contenInput">
             <div class="form-group">
                 <input name="rut" class="form-control" placeholder="Rut (sin puntos ni guión)"> 
             </div>
             
             <div class="form-group">
-                <input name="pass" type="password" class="form-control" placeholder="Contrasña"> 
+                <input name="pass" type="password" class="form-control" placeholder="Contraseña"> 
             </div>
 
         </div>
         <button type="submit" class="miBoton button text-center">INGRESAR</button> 
       
     </form>
-      ${mensajeerror}
+    </br>
+    <p class="animated fadeInUp">${mensajeerror}</p>
+      
     <footer><i class="fa fa-code fa-1x"></i>  By Heber Arratia</footer>
     <!-- jQuery -->
     <script src="js/jquery.js"></script>

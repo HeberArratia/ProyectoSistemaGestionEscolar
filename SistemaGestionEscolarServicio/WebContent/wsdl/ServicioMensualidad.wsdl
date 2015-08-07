@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://servicio" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://servicio" xmlns:intf="http://servicio" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)-->
+ <wsdl:types>
+  <schema elementFormDefault="qualified" targetNamespace="http://servicio" xmlns="http://www.w3.org/2001/XMLSchema">
+   <element name="obtenerMorososMensualidad">
+    <complexType>
+     <sequence>
+      <element name="mes" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="obtenerMorososMensualidadResponse">
+    <complexType>
+     <sequence>
+      <element name="obtenerMorososMensualidadReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="registrarPagoMensualidad">
+    <complexType>
+     <sequence>
+      <element name="rutSc" type="xsd:string"/>
+      <element name="rutEs" type="xsd:string"/>
+      <element name="mes" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="registrarPagoMensualidadResponse">
+    <complexType>
+     <sequence>
+      <element name="registrarPagoMensualidadReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="obtenerMorososMensualidadResponse">
+
+      <wsdl:part element="impl:obtenerMorososMensualidadResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="registrarPagoMensualidadResponse">
+
+      <wsdl:part element="impl:registrarPagoMensualidadResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="registrarPagoMensualidadRequest">
+
+      <wsdl:part element="impl:registrarPagoMensualidad" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="obtenerMorososMensualidadRequest">
+
+      <wsdl:part element="impl:obtenerMorososMensualidad" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:portType name="ServicioMensualidad">
+
+      <wsdl:operation name="obtenerMorososMensualidad">
+
+         <wsdl:input message="impl:obtenerMorososMensualidadRequest" name="obtenerMorososMensualidadRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:obtenerMorososMensualidadResponse" name="obtenerMorososMensualidadResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="registrarPagoMensualidad">
+
+         <wsdl:input message="impl:registrarPagoMensualidadRequest" name="registrarPagoMensualidadRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:registrarPagoMensualidadResponse" name="registrarPagoMensualidadResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="ServicioMensualidadSoapBinding" type="impl:ServicioMensualidad">
+
+      <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="obtenerMorososMensualidad">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="obtenerMorososMensualidadRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="obtenerMorososMensualidadResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="registrarPagoMensualidad">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="registrarPagoMensualidadRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="registrarPagoMensualidadResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="ServicioMensualidadService">
+
+      <wsdl:port binding="impl:ServicioMensualidadSoapBinding" name="ServicioMensualidad">
+
+         <wsdlsoap:address location="http://localhost:8080/SistemaGestionEscolarServicio/services/ServicioMensualidad"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>

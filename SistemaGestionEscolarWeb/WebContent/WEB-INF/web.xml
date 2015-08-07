@@ -11,22 +11,12 @@
   </welcome-file-list>
   <servlet>
     <description></description>
-    <display-name>Login</display-name>
-    <servlet-name>Login</servlet-name>
-    <servlet-class>controlador.Login</servlet-class>
+    <display-name>LoginUsuario</display-name>
+    <servlet-name>LoginUsuario</servlet-name>
+    <servlet-class>servlet.LoginUsuario</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>Login</servlet-name>
-    <url-pattern>/Login</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>IngresoUsuario</display-name>
-    <servlet-name>IngresoUsuario</servlet-name>
-    <servlet-class>controlador.IngresoUsuario</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>IngresoUsuario</servlet-name>
-    <url-pattern>/IngresoUsuario</url-pattern>
+    <servlet-name>LoginUsuario</servlet-name>
+    <url-pattern>/LoginUsuario</url-pattern>
   </servlet-mapping>
 </web-app>

@@ -52,7 +52,7 @@ public class Curso {
 				// Se guarda el curso
 				orm.CursoDAO.save(lormCurso);
 				// Se retorna un mensaje de confirmacion
-				return "Se creo el curso exitosamente";
+				return "Se creó el curso exitosamente";
 			}
 			return "No existe jefe de administracion";		
 		} catch (PersistentException e) {

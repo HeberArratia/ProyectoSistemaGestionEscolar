@@ -1,3 +1,9 @@
+<%@page import="servicio.ServicioMatriculaProxy"%>
+<%@page import="com.google.gson.Gson"%>
+<%@page import="com.google.gson.JsonElement"%>
+<%@page import="com.google.gson.JsonObject"%>
+<%@page import="com.google.gson.JsonParser"%>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -58,7 +64,7 @@
                 </button>
                 <a class="navbar-brand" href="index.jsp">
                     <i class="fa fa-mortar-board fa-1x"></i>
-                    Gestion Educacional</a>
+                    Sistema Gestión Escolar</a>
             </div>
             <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">
@@ -72,7 +78,7 @@
                         </li>
                         
                         <li>
-                            <a href="#"><i class="fa fa-fw fa-power-off"></i> Cerrar Sesion</a>
+                            <a href="#"><i class="fa fa-fw fa-power-off"></i> Cerrar Sesión</a>
                         </li>
                     </ul>
                 </li>
@@ -84,7 +90,7 @@
                         <a href="HomeDirector.jsp"><i class="fa fa-fw fa-home"></i> Inicio</a>
                     </li>
                     <li class="active">
-                        <a href="ObtenerMorososMatricula.jsp"><i class="fa fa-fw fa-bar-chart-o"></i> Obtener reporte estudiantes morosos en los pagos de matrÃ­cula.</a>
+                        <a href="ObtenerMorososMatricula.jsp"><i class="fa fa-fw fa-bar-chart-o"></i> Obtener reporte estudiantes morosos en los pagos de matrí­cula.</a>
                     </li>
                     <li>
                         <a href="ObtenerMorososMensualidad.jsp"><i class="fa fa-fw fa-bar-chart-o"></i> Obtener reporte estudiantes morosos en los pagos de mensualidad.</a>
@@ -112,7 +118,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header">
-                            Estudiantes morosos pagos de matrÃ­cula
+                            Estudiantes morosos pagos de matrí­cula
                         </h1>
                         <ol class="breadcrumb">
                             <li>
@@ -125,73 +131,38 @@
                     </div>
                 </div>
                 <!-- /.row -->
-
-                
-                 <div class="row">
+				
+                <div class="row">
                     <div class="col-lg-12">
-                      
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Page</th>
-                                        <th>Visits</th>
-                                        <th>% New Visits</th>
-                                        <th>Revenue</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>/index.jsp</td>
-                                        <td>1265</td>
-                                        <td>32.3%</td>
-                                        <td>$321.33</td>
-                                    </tr>
-                                    <tr>
-                                        <td>/about.jsp</td>
-                                        <td>261</td>
-                                        <td>33.3%</td>
-                                        <td>$234.12</td>
-                                    </tr>
-                                    <tr>
-                                        <td>/sales.jsp</td>
-                                        <td>665</td>
-                                        <td>21.3%</td>
-                                        <td>$16.34</td>
-                                    </tr>
-                                    <tr>
-                                        <td>/blog.jsp</td>
-                                        <td>9516</td>
-                                        <td>89.3%</td>
-                                        <td>$1644.43</td>
-                                    </tr>
-                                    <tr>
-                                        <td>/404.jsp</td>
-                                        <td>23</td>
-                                        <td>34.3%</td>
-                                        <td>$23.52</td>
-                                    </tr>
-                                    <tr>
-                                        <td>/services.jsp</td>
-                                        <td>421</td>
-                                        <td>60.3%</td>
-                                        <td>$724.32</td>
-                                    </tr>
-                                    <tr>
-                                        <td>/blog/post.jsp</td>
-                                        <td>1233</td>
-                                        <td>93.2%</td>
-                                        <td>$126.34</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                   
-                </div>
-                <!-- /.row -->
-                
-
+                    <table class="table table-bordered table-hover">
+                    	  <thead>
+                             <tr>
+                                <th>Nombre</th>
+                                <th>Rut</th>
+                                <th>Deudas</th> 
+                              </tr>
+                           </thead>
+                    	<% ServicioMatriculaProxy matricula = new ServicioMatriculaProxy(); 
+        				Gson gson = new Gson();
+        				String json=  matricula.obtenerMorososMatricula();
+        	        	String[][] datos = gson.fromJson(json, String[][].class);
+                   		%>
+                   		<tbody>
+                   		<%
+						// Se reccore el arreglo y se muestra en cada celda c/u de los datos de un estudiante
+						for(int i=0;i<datos.length;i++){ %>	
+							<tr>
+  								<td><%= datos[i][0] %></td>
+  								<td><%= datos[i][1] %></td>
+  								<td><%= "$"+datos[i][2] %></td>
+  				
+							</tr>
+						<% } %>
+                   		</tbody>
+                     </table>
+                    
+                     </div>
+                </div>  
             </div>
             <!-- /.container-fluid -->
 

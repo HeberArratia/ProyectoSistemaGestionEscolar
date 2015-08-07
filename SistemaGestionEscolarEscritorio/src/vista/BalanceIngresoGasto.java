@@ -22,7 +22,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import controlador.Finanza.SueldoProxy;
+
 
 public class BalanceIngresoGasto extends JFrame {
 	private JPanel contentPane;

@@ -2,6 +2,8 @@ package controlador.Finanza;
 
 import org.orm.PersistentException;
 
+import com.google.gson.Gson;
+
 import controlador.Academico.Curso;
 /**
  * 
@@ -83,10 +85,12 @@ public class Mensualidad {
 	 * @param mes hasta el cual se desea obtener la lista
 	 * @return
 	 */
-	public static String[][] ListMorososMensualidad(int mes) {
+	public static String ListMorososMensualidad(int mes) {
 		try {
 		// Validamos el mes
 		if (mes > 0 && mes <=10){
+			//Instanciamos el objeto Gson
+			Gson gson = new Gson();
 			// Condicion de busqueda en mensualidad (monto 0 y mes menor o igual al entregado por parametro)
 			String queryMensualidad = "monto='" + 0+ "' "+" and mes<='"+mes+ "'";
 			//Matriz que guarda los datos a retornar
@@ -110,10 +114,11 @@ public class Mensualidad {
 					datos[i][3]=""+ormMensualidad[i].getMonto();
 					System.out.println("Nombre apellido: "+datos[i][0]+" |Rut: "+datos[i][1]+" |Mes: "+datos[i][2]+" |Deuda: $"+datos[i][3]);
 				}
-				// Retornamos la datos
-				return datos;
-		    	}
-		} 
+				String arrayDatosJson = gson.toJson(datos);
+				// Retornamos la datos en formato GSON
+				return arrayDatosJson;
+		    	} return null;
+		} return null;
 		} catch (PersistentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

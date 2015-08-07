@@ -11,7 +11,7 @@ public class JefeAdmTest {
 
 	@Test
 	public void test() {
-		//System.out.println(JefeAdm.agregarNuevoJefeAdm(new Persona("Roberto","Vega","96356453","123456")));
+		System.out.println(JefeAdm.agregarNuevoJefeAdm("Roberto","Vega","96356453","123456"));
 	}
 
 }
