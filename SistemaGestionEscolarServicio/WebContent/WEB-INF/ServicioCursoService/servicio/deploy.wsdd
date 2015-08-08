@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?><!-- Use this file to deploy some handlers/chains and services      --><!-- Two ways to do this:                                           --><!--   java org.apache.axis.client.AdminClient deploy.wsdd          --><!--      after the axis server is running                          --><!-- or                                                             --><!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   --><!--      from the same directory that the Axis engine runs         --><deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from ServicioCursoService WSDL service -->
+
+  <service name="ServicioCurso" provider="java:RPC" style="wrapped" use="literal">
+      <parameter name="wsdlTargetNamespace" value="http://servicio"/>
+      <parameter name="wsdlServiceElement" value="ServicioCursoService"/>
+      <parameter name="schemaQualified" value="http://servicio"/>
+      <parameter name="wsdlServicePort" value="ServicioCurso"/>
+      <parameter name="className" value="servicio.ServicioCurso"/>
+      <parameter name="wsdlPortType" value="ServicioCurso"/>
+      <parameter name="typeMappingVersion" value="1.2"/>
+      <operation xmlns:operNS="http://servicio" xmlns:retNS="http://servicio" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="desactivarCurso" qname="operNS:desactivarCurso" returnQName="retNS:desactivarCursoReturn" returnType="rtns:string" soapAction="">
+        <parameter xmlns:pns="http://servicio" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:id" type="tns:int"/>
+        <parameter xmlns:pns="http://servicio" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:rutDirector" type="tns:string"/>
+      </operation>
+      <operation xmlns:operNS="http://servicio" xmlns:retNS="http://servicio" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="incribirEstudiante" qname="operNS:incribirEstudiante" returnQName="retNS:incribirEstudianteReturn" returnType="rtns:string" soapAction="">
+        <parameter xmlns:pns="http://servicio" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:idCurso" type="tns:int"/>
+        <parameter xmlns:pns="http://servicio" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:rutEstudiante" type="tns:string"/>
+        <parameter xmlns:pns="http://servicio" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:rutProfesor" type="tns:string"/>
+      </operation>
+      <operation xmlns:operNS="http://servicio" xmlns:retNS="http://servicio" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="crearCurso" qname="operNS:crearCurso" returnQName="retNS:crearCursoReturn" returnType="rtns:string" soapAction="">
+        <parameter xmlns:pns="http://servicio" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:nombreCurso" type="tns:string"/>
+        <parameter xmlns:pns="http://servicio" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:rutJefeAdm" type="tns:string"/>
+      </operation>
+      <operation xmlns:operNS="http://servicio" xmlns:retNS="http://servicio" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="asignarProfesor" qname="operNS:asignarProfesor" returnQName="retNS:asignarProfesorReturn" returnType="rtns:string" soapAction="">
+        <parameter xmlns:pns="http://servicio" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:id" type="tns:int"/>
+        <parameter xmlns:pns="http://servicio" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:nombreCurso" type="tns:string"/>
+        <parameter xmlns:pns="http://servicio" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:rutProfe" type="tns:string"/>
+        <parameter xmlns:pns="http://servicio" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:rutJefeAdm" type="tns:string"/>
+      </operation>
+      <parameter name="allowedMethods" value="asignarProfesor incribirEstudiante crearCurso desactivarCurso"/>
+
+  </service>
+</deployment>

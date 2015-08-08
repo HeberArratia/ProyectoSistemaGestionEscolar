@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://servicio" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://servicio" xmlns:intf="http://servicio" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)-->
+ <wsdl:types>
+  <schema elementFormDefault="qualified" targetNamespace="http://servicio" xmlns="http://www.w3.org/2001/XMLSchema">
+   <element name="registrarSueldo">
+    <complexType>
+     <sequence>
+      <element name="rutProf" type="xsd:string"/>
+      <element name="rutAdm" type="xsd:string"/>
+      <element name="mes" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="registrarSueldoResponse">
+    <complexType>
+     <sequence>
+      <element name="registrarSueldoReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="obtenerSueldos">
+    <complexType>
+     <sequence>
+      <element name="rutProf" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="obtenerSueldosResponse">
+    <complexType>
+     <sequence>
+      <element name="obtenerSueldosReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="registrarSueldoResponse">
+
+      <wsdl:part element="impl:registrarSueldoResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="registrarSueldoRequest">
+
+      <wsdl:part element="impl:registrarSueldo" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="obtenerSueldosRequest">
+
+      <wsdl:part element="impl:obtenerSueldos" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="obtenerSueldosResponse">
+
+      <wsdl:part element="impl:obtenerSueldosResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:portType name="ServicioSueldo">
+
+      <wsdl:operation name="registrarSueldo">
+
+         <wsdl:input message="impl:registrarSueldoRequest" name="registrarSueldoRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:registrarSueldoResponse" name="registrarSueldoResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="obtenerSueldos">
+
+         <wsdl:input message="impl:obtenerSueldosRequest" name="obtenerSueldosRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:obtenerSueldosResponse" name="obtenerSueldosResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="ServicioSueldoSoapBinding" type="impl:ServicioSueldo">
+
+      <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="registrarSueldo">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="registrarSueldoRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="registrarSueldoResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="obtenerSueldos">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="obtenerSueldosRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="obtenerSueldosResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="ServicioSueldoService">
+
+      <wsdl:port binding="impl:ServicioSueldoSoapBinding" name="ServicioSueldo">
+
+         <wsdlsoap:address location="http://localhost:8080/SistemaGestionEscolarServicio/services/ServicioSueldo"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>

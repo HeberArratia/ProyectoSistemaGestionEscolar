@@ -1,0 +1,66 @@
+body{
+	background:black;
+	background-image: url("../images/footer_lodyas.png");
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+  	-o-background-size: cover;
+  	background-size: cover;
+	background-position: center center;
+	font-family: 'Raleway';
+}
+
+
+
+
+h1{
+	padding-top: 16px;
+	color: white;
+	font-size: 2.4em;
+	text-align: center;
+
+}
+
+form{
+	margin: 0;
+	padding: 0;
+}
+
+.panel h3{
+	padding-top: 20px;
+	text-align: center;
+	color: #666666;
+	font-size: 2em;
+	font-weight: bold;
+}
+
+.panel{
+	padding: 1px 20px;
+	width: 300px;
+	margin: 0 auto;
+	border-radius: 2px;
+	background-color: rgba(255, 255, 255, 1);
+	
+
+-webkit-box-shadow: 0px 3px 18px 4px rgba(0,0,0,0.26);
+-moz-box-shadow: 0px 3px 18px 4px rgba(0,0,0,0.26);
+box-shadow: 0px 3px 18px 4px rgba(0,0,0,0.26);
+}
+
+.panel p{
+	color: teal;
+}
+
+.panel .respuesta{
+	padding-bottom: 18px;
+}
+
+footer{
+	color: white;
+	position: fixed;
+	left: 10px;
+	bottom: 10px;
+}
+
+footer i{
+	font-weight: bolder;
+}
