@@ -17,12 +17,21 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
+
+import servicio.ServicioEstudianteProxy;
+import servicio.ServicioMensualidad;
+import servicio.ServicioMensualidadProxy;
+
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 import java.awt.event.ActionEvent;
+import javax.swing.JTextField;
 
 public class PagoMensualidad extends JFrame {
 
 	private JPanel contentPane;
+	private JTextField textMes;
+	private JTextField txtRut;
 
 	/**
 	 * Launch the application.
@@ -60,7 +69,7 @@ public class PagoMensualidad extends JFrame {
 		contentPane.add(lblSecretaria);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(101, 54, 353, 325);
+		panel.setBounds(101, 54, 353, 336);
 		panel.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Registrar pago de mensualidad ", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(255, 250, 250)));
 		panel.setBackground(new Color(0, 139, 139));
 		contentPane.add(panel);
@@ -77,108 +86,176 @@ public class PagoMensualidad extends JFrame {
 		label_1.setBounds(10, 26, 97, 14);
 		panel.add(label_1);
 		
-		JTextArea textArea = new JTextArea();
-		textArea.setFont(new Font("Monospaced", Font.PLAIN, 16));
-		textArea.setBounds(10, 39, 105, 22);
-		panel.add(textArea);
 		
-		JButton btnIngresar = new JButton("Ingresar");
-		btnIngresar.setFont(new Font("Calibri", Font.PLAIN, 12));
-		btnIngresar.setBounds(120, 39, 97, 23);
-		panel.add(btnIngresar);
-		
-		JPanel panel_1 = new JPanel();
-		panel_1.setLayout(null);
-		panel_1.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		panel_1.setBackground(new Color(0, 139, 139));
-		panel_1.setBounds(10, 84, 292, 92);
-		panel.add(panel_1);
-		
-		JLabel label_2 = new JLabel("Nombre:");
-		label_2.setForeground(new Color(255, 255, 240));
-		label_2.setFont(new Font("Tahoma", Font.BOLD, 11));
-		label_2.setBounds(10, 0, 164, 25);
-		panel_1.add(label_2);
-		
-		JLabel label_3 = new JLabel("Apellido:");
-		label_3.setForeground(new Color(255, 255, 240));
-		label_3.setFont(new Font("Tahoma", Font.BOLD, 11));
-		label_3.setBounds(10, 22, 164, 25);
-		panel_1.add(label_3);
-		
-		JLabel label_4 = new JLabel("Rut: ");
-		label_4.setForeground(new Color(255, 255, 240));
-		label_4.setFont(new Font("Tahoma", Font.BOLD, 11));
-		label_4.setBounds(10, 51, 164, 14);
-		panel_1.add(label_4);
-		
-		JLabel label_5 = new JLabel("Estado Matr\u00EDcula:");
-		label_5.setForeground(new Color(255, 255, 240));
-		label_5.setFont(new Font("Tahoma", Font.BOLD, 11));
-		label_5.setBounds(10, 72, 164, 14);
-		panel_1.add(label_5);
-		
-		JLabel label_6 = new JLabel("");
-		label_6.setForeground(new Color(255, 255, 240));
-		label_6.setBounds(118, 72, 164, 14);
-		panel_1.add(label_6);
-		
-		JLabel label_7 = new JLabel("");
-		label_7.setForeground(new Color(255, 255, 240));
-		label_7.setBounds(118, 51, 164, 14);
-		panel_1.add(label_7);
-		
-		JLabel label_8 = new JLabel("");
-		label_8.setForeground(new Color(255, 255, 240));
-		label_8.setBounds(118, 22, 164, 25);
-		panel_1.add(label_8);
-		
-		JLabel label_9 = new JLabel("");
-		label_9.setForeground(new Color(255, 255, 240));
-		label_9.setBounds(118, 0, 164, 25);
-		panel_1.add(label_9);
 		
 		JLabel lblMesAPagar = new JLabel("Mes a pagar:");
 		lblMesAPagar.setForeground(new Color(255, 255, 240));
 		lblMesAPagar.setFont(new Font("Calibri", Font.PLAIN, 12));
-		lblMesAPagar.setBounds(10, 188, 97, 14);
+		lblMesAPagar.setBounds(10, 198, 97, 14);
 		panel.add(lblMesAPagar);
-		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"}));
-		comboBox.setBounds(10, 202, 122, 20);
-		panel.add(comboBox);
 		
 		JLabel lblNewLabel = new JLabel("Monto a pagar por curso:");
 		lblNewLabel.setForeground(new Color(255, 255, 255));
-		lblNewLabel.setBounds(10, 226, 122, 14);
+		lblNewLabel.setBounds(10, 243, 185, 14);
 		panel.add(lblNewLabel);
 		
 		JTextArea textArea_1 = new JTextArea();
 		textArea_1.setEnabled(false);
 		textArea_1.setText("10000");
-		textArea_1.setBounds(10, 243, 114, 22);
+		textArea_1.setBounds(10, 259, 114, 22);
 		panel.add(textArea_1);
 		
-		JLabel lblMontoAPagar = new JLabel("Monto a pagar:");
-		lblMontoAPagar.setForeground(Color.WHITE);
-		lblMontoAPagar.setBounds(10, 275, 122, 14);
-		panel.add(lblMontoAPagar);
 		
-		JTextArea textArea_2 = new JTextArea();
-		textArea_2.setText("100000");
-		textArea_2.setEnabled(false);
-		textArea_2.setBounds(10, 292, 114, 22);
-		panel.add(textArea_2);
+		
+		textMes = new JTextField();
+		textMes.setBounds(6, 214, 134, 28);
+		panel.add(textMes);
+		textMes.setColumns(10);
+		
+		txtRut = new JTextField();
+		txtRut.setBounds(5, 37, 134, 28);
+		panel.add(txtRut);
+		txtRut.setColumns(10);
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setLayout(null);
+		panel_1.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		panel_1.setBackground(new Color(0, 139, 139));
+		panel_1.setBounds(10, 101, 292, 92);
+		panel.add(panel_1);
+		
+		JLabel label_2 = new JLabel("Estudiante:");
+		label_2.setForeground(new Color(255, 255, 240));
+		label_2.setFont(new Font("Tahoma", Font.BOLD, 11));
+		label_2.setBounds(10, 0, 164, 25);
+		panel_1.add(label_2);
+		
+		JLabel label_3 = new JLabel("Rut:");
+		label_3.setForeground(new Color(255, 255, 240));
+		label_3.setFont(new Font("Tahoma", Font.BOLD, 11));
+		label_3.setBounds(10, 22, 164, 25);
+		panel_1.add(label_3);
+		
+		JLabel label_4 = new JLabel("Estado Matrícula:");
+		label_4.setForeground(new Color(255, 255, 240));
+		label_4.setFont(new Font("Tahoma", Font.BOLD, 11));
+		label_4.setBounds(10, 51, 164, 14);
+		panel_1.add(label_4);
+		
+		JLabel label_5 = new JLabel("Apoderado:");
+		label_5.setForeground(new Color(255, 255, 240));
+		label_5.setFont(new Font("Tahoma", Font.BOLD, 11));
+		label_5.setBounds(10, 72, 164, 14);
+		panel_1.add(label_5);
+		
+		JLabel lblApoderado = new JLabel("");
+		lblApoderado.setForeground(new Color(255, 255, 240));
+		lblApoderado.setBounds(118, 72, 164, 14);
+		panel_1.add(lblApoderado);
+		
+		JLabel lblEstado = new JLabel("");
+		lblEstado.setForeground(new Color(255, 255, 240));
+		lblEstado.setBounds(118, 51, 164, 14);
+		panel_1.add(lblEstado);
+		
+		JLabel lblRut = new JLabel("");
+		lblRut.setForeground(new Color(255, 255, 240));
+		lblRut.setBounds(118, 22, 164, 25);
+		panel_1.add(lblRut);
+		
+		JLabel lblEstudiante = new JLabel("");
+		lblEstudiante.setForeground(new Color(255, 255, 240));
+		lblEstudiante.setBounds(118, 0, 164, 25);
+		panel_1.add(lblEstudiante);
+		
+		JLabel lblInfoBuscar = new JLabel("");
+		lblInfoBuscar.setForeground(Color.WHITE);
+		lblInfoBuscar.setBounds(10, 80, 314, 16);
+		panel.add(lblInfoBuscar);
+		
+		JLabel lblInfoPagar = new JLabel("");
+		lblInfoPagar.setForeground(Color.WHITE);
+		lblInfoPagar.setBounds(10, 286, 314, 16);
+		panel.add(lblInfoPagar);
+		
 		
 		JButton btnRegistrar = new JButton("Registrar");
-		btnRegistrar.setBounds(254, 293, 89, 23);
+		btnRegistrar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					//Obtenemos el ems en que se desea pagar la mensualidad
+					String mes = textMes.getText();
+					//Si el mes es un dato entero y no se encuentra vacio se puede proceder
+					if (!mes.equals("") && mes.matches("\\d*")){
+						//Convertimos el mes a entero
+						int intmes = Integer.parseInt(mes);
+						//Requerimos al servicio que permite pagar la mensualidad de un mes
+						ServicioMensualidadProxy mensualidad = new ServicioMensualidadProxy();
+						//Enviamos los parametros necesarios y almacenamos el mensaje de retorno
+						String resultado = mensualidad.registrarPagoMensualidad("183511203", lblRut.getText(), intmes);
+						//Imprimimos el mensaje de retorno
+						lblInfoPagar.setText(resultado);
+					//Si el mes no es entero y se encuentra vacio se imprime mensaje
+					} else {
+						lblInfoPagar.setText("Ingrese un més válido");
+					}
+					
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		btnRegistrar.setEnabled(false);
+		btnRegistrar.setBounds(258, 307, 89, 23);
 		panel.add(btnRegistrar);
+		
+		JButton btnIngresar = new JButton("Buscar");
+		btnIngresar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					//Obtenemos el rut del estudiante
+					String rutEstudiante = txtRut.getText();
+					//Si el rut del estudiante es distinto de vacio se procede
+					if (!rutEstudiante.equals("")){
+						//Requerimos el servicio que permite buscar a un estudiante y retornarlo
+						ServicioEstudianteProxy estudiante = new ServicioEstudianteProxy();
+						//Pasamos el rut y almacenamos el arreglo que retorna el metodo
+						String datos[] = estudiante.buscarEstudiante(rutEstudiante);
+						//Si el arreglo es distinto de nulo se puede proceder
+						if (datos!=null){
+							//Mostramos los datos del estudiante al usuario
+							lblEstudiante.setText(datos[0]);
+							lblRut.setText(datos[1]);
+							lblEstado.setText(datos[2]);
+							lblApoderado.setText(datos[3]);
+							//Habilitamos el boton que permite pagar mensualidad
+							btnRegistrar.setEnabled(true);
+						//Si el arreglo es nulo mostramos mensaje al usuario
+						} else {
+							lblInfoBuscar.setText("El estudiante no existe");
+						}
+					//Si el rut del estudiante se encuentra vacio se imprime mensaje al usuario
+					} else {
+						lblInfoBuscar.setText("No debe dejar el campo vacío");
+					}
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		btnIngresar.setFont(new Font("Calibri", Font.PLAIN, 12));
+		btnIngresar.setBounds(141, 39, 97, 23);
+		panel.add(btnIngresar);
+		
 		
 		JButton button = new JButton("Volver");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-			
+				Bienvenido bien = new Bienvenido();
+				bien.setVisible(true);
+				setVisible(false);
 			}
 		});
 		button.setIcon(new ImageIcon("C:\\Users\\Heber\\workspace\\ProyectoGestionEduc-Escritorio\\src\\Files\\deshacer-icono-5993-16.png"));
@@ -186,5 +263,4 @@ public class PagoMensualidad extends JFrame {
 		button.setBounds(10, 393, 89, 23);
 		contentPane.add(button);
 	}
-
 }

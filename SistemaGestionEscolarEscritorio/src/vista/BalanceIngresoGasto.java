@@ -18,9 +18,16 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 import java.awt.event.ActionEvent;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
+import com.google.gson.Gson;
+
+import servicio.ServicioMatriculaProxy;
+import servicio.ServicioReporteProxy;
+import servicio.ServicioSueldoProxy;
 
 
 
@@ -88,7 +95,7 @@ public class BalanceIngresoGasto extends JFrame {
 			new Object[][] {
 			},
 			new String[] {
-				"Año","Mes","Ingeso","Gasto","Balance"
+				"Mes","Ingreso","Gasto","Balance"
 			}
 		));
 		scrollPane.setViewportView(table);
@@ -97,7 +104,9 @@ public class BalanceIngresoGasto extends JFrame {
 		JButton button = new JButton("Volver");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				Bienvenido bien = new Bienvenido();
+				bien.setVisible(true);
+				setVisible(false);
 			}
 		});
 		button.setIcon(new ImageIcon("C:\\Users\\Heber\\Documents\\ProyectoGestionEducacional\\ProyectoGestionEduc-Escritorio\\src\\Files\\deshacer-icono-5993-16.png"));
@@ -128,6 +137,35 @@ public class BalanceIngresoGasto extends JFrame {
 					.addComponent(button, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
 		);
 		contentPane.setLayout(gl_contentPane);
+		//Obtenemos el número de columnas de la tabla
+		int numCols = table.getModel().getColumnCount();
+		//Arreglo de objetos del largo de la tabla
+		Object [] fila = new Object[numCols];
+		//Servicio que permite obtener el reporte
+		ServicioReporteProxy reporte = new ServicioReporteProxy();
+		Gson gson = new Gson();
+		String json;
+		try {
+			//Invocamos el metodo y almacenamos su valor de retorno en una variable
+			json = reporte.obtenerBalanceIngGasto();
+			// Si la variable es distinta de nulo se puede proceder
+			if (json!=null){
+				//Transformamos la variable en una matriz
+				String[][] datos = gson.fromJson(json, String[][].class);
+				//Recorremos la matriz y alamcenamos sus datos
+				for (int i = 0; i < datos.length; i++) {
+					fila[0] = i+1;
+					fila[1] = "$"+datos[i][0];
+					fila[2] = "$"+datos[i][1];
+					fila[3] = "$"+datos[i][2];
+					//Enviamos los datos a la tabla
+					((DefaultTableModel) table.getModel()).addRow(fila);
+				}
+			}
+		} catch (RemoteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 
 }

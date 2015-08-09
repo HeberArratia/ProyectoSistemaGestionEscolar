@@ -13,16 +13,26 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.ImageIcon;
 import javax.swing.border.TitledBorder;
+
+import servicio.ServicioCursoProxy;
+
 import javax.swing.UIManager;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 import java.awt.event.ActionEvent;
+import java.awt.Component;
+import javax.swing.JTextField;
 
 public class CrearCurso extends JFrame {
 
 	private JPanel contentPane;
+	private JTextField txtNombreCurso;
+	private JTextField textRutProfesor;
+	private JTextField textCodigoCurso;
+	private JTextField textNombreCurso;
 
 	/**
 	 * Launch the application.
@@ -63,7 +73,9 @@ public class CrearCurso extends JFrame {
 		JButton button = new JButton("Volver");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				Bienvenido bien = new Bienvenido();
+				bien.setVisible(true);
+				setVisible(false);
 			}
 		});
 		button.setIcon(new ImageIcon("C:\\Users\\Heber\\Documents\\ProyectoGestionEducacional\\ProyectoGestionEduc-Escritorio\\src\\Files\\deshacer-icono-5993-16.png"));
@@ -72,35 +84,29 @@ public class CrearCurso extends JFrame {
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap(74, Short.MAX_VALUE)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(panel, GroupLayout.PREFERRED_SIZE, 409, GroupLayout.PREFERRED_SIZE)
-							.addGap(54))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(label, GroupLayout.PREFERRED_SIZE, 146, GroupLayout.PREFERRED_SIZE)
-							.addGap(173))))
+					.addContainerGap(218, Short.MAX_VALUE)
+					.addComponent(label, GroupLayout.PREFERRED_SIZE, 146, GroupLayout.PREFERRED_SIZE)
+					.addGap(173))
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addComponent(button, GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap(450, Short.MAX_VALUE))
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(74)
+					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 409, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(54, Short.MAX_VALUE))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(28)
 					.addComponent(label, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
-					.addGap(18)
-					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 212, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 270, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(button, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
 					.addGap(14))
 		);
 		panel.setLayout(null);
-		
-		JTextArea textArea = new JTextArea();
-		textArea.setFont(new Font("Monospaced", Font.PLAIN, 16));
-		textArea.setBounds(21, 36, 160, 22);
-		panel.add(textArea);
 		
 		JLabel lblNombreCurso = new JLabel("Nombre curso:");
 		lblNombreCurso.setForeground(new Color(255, 255, 240));
@@ -108,50 +114,126 @@ public class CrearCurso extends JFrame {
 		lblNombreCurso.setBounds(21, 23, 97, 14);
 		panel.add(lblNombreCurso);
 		
-		JButton btnCrear = new JButton("Crear");
-		btnCrear.setFont(new Font("Calibri", Font.PLAIN, 12));
-		btnCrear.setBounds(182, 37, 97, 23);
-		panel.add(btnCrear);
+		JLabel lblInfoCrear = new JLabel("");
+		lblInfoCrear.setAlignmentY(Component.TOP_ALIGNMENT);
+		lblInfoCrear.setAlignmentX(Component.RIGHT_ALIGNMENT);
+		lblInfoCrear.setForeground(Color.WHITE);
+		lblInfoCrear.setBounds(21, 64, 351, 16);
+		panel.add(lblInfoCrear);
 		
-		JTextArea textArea_1 = new JTextArea();
-		textArea_1.setFont(new Font("Monospaced", Font.PLAIN, 16));
-		textArea_1.setBounds(21, 82, 72, 22);
-		panel.add(textArea_1);
+		JLabel lblInfoAsignar = new JLabel("");
+		lblInfoAsignar.setForeground(Color.WHITE);
+		lblInfoAsignar.setBounds(21, 218, 359, 16);
+		panel.add(lblInfoAsignar);
+		contentPane.setLayout(gl_contentPane);
+		
+		JButton btnCrear = new JButton("Crear");
+		btnCrear.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//Obtenemos el nombre del curso
+				String nombreCurso = textNombreCurso.getText();
+				try {
+					//Si el nombre del curso no se encuentra vacio
+					if (!nombreCurso.equals("")){
+						//Requerimos el servicio que permite crear el curso
+						ServicioCursoProxy curso = new ServicioCursoProxy();
+						//Enviamos los parametros y almacenamos el valor de retorno en una variable
+						String resultado = curso.crearCurso(nombreCurso, "96356453");
+						//Mostramos el resultado al usuario
+						lblInfoCrear.setText(resultado);
+					//Si el nombre del curso se encuentra vacio se imprime un mensaje	
+					} else {
+						lblInfoCrear.setText("Debe ingresar el nombre del curso");
+					}
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+			}
+		});
+		btnCrear.setFont(new Font("Calibri", Font.PLAIN, 12));
+		btnCrear.setBounds(147, 40, 97, 23);
+		panel.add(btnCrear);
 		
 		JLabel lblCdigoCurso = new JLabel("C\u00F3digo curso:");
 		lblCdigoCurso.setForeground(new Color(255, 255, 240));
 		lblCdigoCurso.setFont(new Font("Calibri", Font.PLAIN, 12));
-		lblCdigoCurso.setBounds(21, 69, 97, 14);
+		lblCdigoCurso.setBounds(21, 83, 97, 14);
 		panel.add(lblCdigoCurso);
-		
-		JTextArea txtrCursoCreado = new JTextArea();
-		txtrCursoCreado.setEnabled(false);
-		txtrCursoCreado.setFont(new Font("Monospaced", Font.PLAIN, 12));
-		txtrCursoCreado.setBounds(21, 127, 105, 22);
-		panel.add(txtrCursoCreado);
 		
 		JLabel label_2 = new JLabel("Nombre curso:");
 		label_2.setForeground(new Color(255, 255, 240));
 		label_2.setFont(new Font("Calibri", Font.PLAIN, 12));
-		label_2.setBounds(21, 114, 97, 14);
+		label_2.setBounds(21, 128, 97, 14);
 		panel.add(label_2);
-		
-		JTextArea textArea_3 = new JTextArea();
-		textArea_3.setFont(new Font("Monospaced", Font.PLAIN, 16));
-		textArea_3.setBounds(21, 173, 105, 22);
-		panel.add(textArea_3);
 		
 		JLabel lblRutProfesor = new JLabel("Rut profesor:");
 		lblRutProfesor.setForeground(new Color(255, 255, 240));
 		lblRutProfesor.setFont(new Font("Calibri", Font.PLAIN, 12));
-		lblRutProfesor.setBounds(21, 160, 97, 14);
+		lblRutProfesor.setBounds(21, 174, 97, 14);
 		panel.add(lblRutProfesor);
 		
 		JButton btnAsignarProfesor = new JButton("Asignar profesor");
-		btnAsignarProfesor.setBounds(261, 177, 138, 23);
+		btnAsignarProfesor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//Requerimos el codigo del curso
+				String codigoCurso = textCodigoCurso.getText();
+				try {
+					// Si el codigo del curso es un dato entero se puede proceder
+					if (codigoCurso.matches("\\d*")){
+						//Obtenemos los datos faltantes
+						String nombreCurso = txtNombreCurso.getText();
+						String rutProfe = textRutProfesor.getText();
+						//Si los datos faltantes contienen informacion se puede proceder
+						if((!nombreCurso.equals("")) && (!rutProfe.equals(""))){
+							//Convertimos el nombre del curso a entero
+							int idCurso = Integer.parseInt(codigoCurso);
+							//Requerimos al servicio que permite asignar el profesor
+							ServicioCursoProxy curso = new ServicioCursoProxy();
+							//Enviamos los parametros y almacenamos el valor de retorno del metodo
+							System.out.println(idCurso + " " + nombreCurso + " " + rutProfe);
+							String resultado = curso.asignarProfesor(idCurso, nombreCurso, rutProfe, "96356453");
+							//Mostramos mensaje de confirmacion
+							lblInfoAsignar.setText(resultado);
+						//Si los datos se encuentran vacios se imprime mensaje
+						} else {
+							lblInfoAsignar.setText("No debe dejar campos en blanco");
+						}
+					} else {
+						//Si el codigo del curso no es un dato entero se imprime mensaje
+						lblInfoAsignar.setText("Código de curso inválido");
+					}
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		btnAsignarProfesor.setBounds(265, 241, 138, 23);
 		panel.add(btnAsignarProfesor);
-		contentPane.setLayout(gl_contentPane);
+		
+		txtNombreCurso = new JTextField();
+		txtNombreCurso.setForeground(Color.DARK_GRAY);
+		txtNombreCurso.setBounds(16, 144, 134, 28);
+		panel.add(txtNombreCurso);
+		txtNombreCurso.setColumns(10);
+		
+		textRutProfesor = new JTextField();
+		textRutProfesor.setBounds(16, 189, 134, 28);
+		panel.add(textRutProfesor);
+		textRutProfesor.setColumns(10);
+		
+		textCodigoCurso = new JTextField();
+		textCodigoCurso.setBounds(16, 98, 134, 28);
+		panel.add(textCodigoCurso);
+		textCodigoCurso.setColumns(10);
+		
+		textNombreCurso = new JTextField();
+		textNombreCurso.setBounds(16, 36, 134, 28);
+		panel.add(textNombreCurso);
+		textNombreCurso.setColumns(10);
+		
+		
 	}
-
-
 }

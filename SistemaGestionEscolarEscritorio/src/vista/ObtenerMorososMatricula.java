@@ -6,6 +6,7 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
@@ -20,6 +21,10 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
+
+import com.google.gson.Gson;
+
+import servicio.ServicioMatriculaProxy;
 
 
 public class ObtenerMorososMatricula extends JFrame {
@@ -92,7 +97,7 @@ public class ObtenerMorososMatricula extends JFrame {
 			},
 			new String[] {
 				// Titulos de la tabla
-				"Nombre", "Apellido", "Rut", "Estado Matricula"
+				"Estudiante", "Rut", "Deuda"
 			}
 		));
 		scrollPane.setViewportView(table);
@@ -101,7 +106,9 @@ public class ObtenerMorososMatricula extends JFrame {
 		JButton button = new JButton("Volver");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				Bienvenido bien = new Bienvenido();
+				bien.setVisible(true);
+				setVisible(false);
 			}
 		});
 		
@@ -110,23 +117,37 @@ public class ObtenerMorososMatricula extends JFrame {
 		button.setFont(new Font("Calibri", Font.PLAIN, 12));
 		button.setBounds(10, 327, 89, 23);
 		contentPane.add(button);
+		
+		//Obtenemos el número de columnas de la tabla
 		int numCols = table.getModel().getColumnCount();
-		
+		//Arreglo de objetos del largo de la tabla
 		Object [] fila = new Object[numCols];
-		/* Se llama al metodo para tener el arreglo de estudiantes morosos en el pago de matricula
-		 * y se almacenan en un arreglo de tipo Estudiante
-		 */
-		/*Estudiante[] est = Matricula.obtenerListMorososMatricula();
-        // Se reccore el arreglo y se almacenan los datos de un estudiante en un nuevo arreglo
-		for (int i = 0; i < est.length; i++) {
-			fila[0] = est[i].getPersona().getNombre();
-			fila[1] = est[i].getPersona().getApellido();
-			fila[2] = est[i].getPersona().getRut();
-			fila[3] = ""+est[i].getMatricula().getEstadoMatricula();
-			// El nuevo arreglo llamado fila se agrega como una fila a la tabla
-			((DefaultTableModel) table.getModel()).addRow(fila);*/
+		//Servicio que permite imprimir morosos matricula
+		ServicioMatriculaProxy matricula = new ServicioMatriculaProxy(); 
+		Gson gson = new Gson();
+		String json;
+		try {
+			//Invocamos el metodo y almacenamos su valor de retorno en una variable
+			json = matricula.obtenerMorososMatricula();
+			// Si la variable es distinta de nulo se puede proceder
+			if (json!=null){
+				//Transformamos la variable en una matriz
+				String[][] datos = gson.fromJson(json, String[][].class);
+				//Recorremos la matriz y alamcenamos sus datos
+				for (int i = 0; i < datos.length; i++) {
+					fila[0] = datos[i][0];
+					fila[1] = datos[i][1];
+					fila[2] = "$"+datos[i][2];
+					//Enviamos los datos a la tabla
+					((DefaultTableModel) table.getModel()).addRow(fila);
+				}
+			}
+		} catch (RemoteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
-		
+	}
 }
+		
 
 

@@ -13,16 +13,22 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.ImageIcon;
 import javax.swing.border.TitledBorder;
+
+import servicio.ServicioCursoProxy;
+
 import javax.swing.JTextArea;
 import javax.swing.JButton;
 import javax.swing.border.EtchedBorder;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 import java.awt.event.ActionEvent;
+import javax.swing.JTextField;
 
 public class DesactivarCurso extends JFrame {
 
 	private JPanel contentPane;
+	private JTextField txtCodigoCurso;
 
 	/**
 	 * Launch the application.
@@ -64,25 +70,27 @@ public class DesactivarCurso extends JFrame {
 	JButton button = new JButton("Volver");
 	button.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
-			
+			Bienvenido bien = new Bienvenido();
+			bien.setVisible(true);
+			setVisible(false);
 		}
 	});
 	button.setIcon(new ImageIcon("C:\\Users\\Heber\\Documents\\ProyectoGestionEducacional\\ProyectoGestionEduc-Escritorio\\src\\Files\\deshacer-icono-5993-16.png"));
 	button.setFont(new Font("Calibri", Font.PLAIN, 12));
 	GroupLayout gl_contentPane = new GroupLayout(contentPane);
 	gl_contentPane.setHorizontalGroup(
-		gl_contentPane.createParallelGroup(Alignment.TRAILING)
-			.addGroup(gl_contentPane.createSequentialGroup()
-				.addGap(71)
-				.addComponent(panel, GroupLayout.PREFERRED_SIZE, 383, GroupLayout.PREFERRED_SIZE)
-				.addContainerGap(83, Short.MAX_VALUE))
+		gl_contentPane.createParallelGroup(Alignment.LEADING)
 			.addGroup(gl_contentPane.createSequentialGroup()
 				.addContainerGap(207, Short.MAX_VALUE)
 				.addComponent(label, GroupLayout.PREFERRED_SIZE, 146, GroupLayout.PREFERRED_SIZE)
 				.addGap(184))
-			.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+			.addGroup(gl_contentPane.createSequentialGroup()
 				.addComponent(button, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
 				.addContainerGap(451, Short.MAX_VALUE))
+			.addGroup(gl_contentPane.createSequentialGroup()
+				.addGap(71)
+				.addComponent(panel, GroupLayout.PREFERRED_SIZE, 383, GroupLayout.PREFERRED_SIZE)
+				.addContainerGap(83, Short.MAX_VALUE))
 	);
 	gl_contentPane.setVerticalGroup(
 		gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -90,16 +98,11 @@ public class DesactivarCurso extends JFrame {
 				.addGap(23)
 				.addComponent(label, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
 				.addGap(18)
-				.addComponent(panel, GroupLayout.PREFERRED_SIZE, 177, GroupLayout.PREFERRED_SIZE)
-				.addPreferredGap(ComponentPlacement.RELATED, 107, Short.MAX_VALUE)
+				.addComponent(panel, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)
+				.addPreferredGap(ComponentPlacement.RELATED, 188, Short.MAX_VALUE)
 				.addComponent(button))
 	);
 	panel.setLayout(null);
-	
-	JTextArea textArea = new JTextArea();
-	textArea.setFont(new Font("Monospaced", Font.PLAIN, 16));
-	textArea.setBounds(10, 38, 105, 22);
-	panel.add(textArea);
 	
 	JLabel lblCdigoCurso = new JLabel("C\u00F3digo curso:");
 	lblCdigoCurso.setForeground(new Color(255, 255, 240));
@@ -107,57 +110,46 @@ public class DesactivarCurso extends JFrame {
 	lblCdigoCurso.setBounds(10, 25, 97, 14);
 	panel.add(lblCdigoCurso);
 	
-	JButton btnIngresar = new JButton("Ingresar");
-	btnIngresar.setFont(new Font("Calibri", Font.PLAIN, 12));
-	btnIngresar.setBounds(120, 38, 97, 23);
-	panel.add(btnIngresar);
+	txtCodigoCurso = new JTextField();
+	txtCodigoCurso.setBounds(7, 40, 134, 28);
+	panel.add(txtCodigoCurso);
+	txtCodigoCurso.setColumns(10);
 	
-	JPanel panel_1 = new JPanel();
-	panel_1.setLayout(null);
-	panel_1.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-	panel_1.setBackground(new Color(0, 139, 139));
-	panel_1.setBounds(10, 74, 292, 49);
-	panel.add(panel_1);
+	JLabel lblInfo = new JLabel("");
+	lblInfo.setForeground(Color.WHITE);
+	lblInfo.setBounds(11, 69, 345, 16);
+	panel.add(lblInfo);
 	
-	JLabel lblNombreCurso = new JLabel("Nombre Curso:");
-	lblNombreCurso.setForeground(new Color(255, 255, 240));
-	lblNombreCurso.setFont(new Font("Tahoma", Font.BOLD, 11));
-	lblNombreCurso.setBounds(10, 0, 164, 25);
-	panel_1.add(lblNombreCurso);
+	JButton btnNewButton_1 = new JButton("Desactivar");
+	btnNewButton_1.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent e) {		
+			try {
+				//Obtenemos el codigo del curso
+				String codigoCurso = txtCodigoCurso.getText();
+				//Si el codigo del curso es un dato entero y tiene informacion se puede proceder
+				if (codigoCurso.matches("\\d*") && !codigoCurso.equals("")){
+					//Convertimos el codigo de curso a entero
+					int idCurso = Integer.parseInt(codigoCurso);
+					//Requerimos el servicio que permite desactivar el curso
+					ServicioCursoProxy curso = new ServicioCursoProxy();
+					//Enviamos los parametros y almacenamos el valor de retorno
+					String resultado = curso.desactivarCurso(idCurso, "52347653");
+					//Imprimimos mensaje de confirmacion al usuario
+					lblInfo.setText(resultado);
+				//Si el codigo de curso no es entero se imprime mensaje al usuario
+				} else {
+					lblInfo.setText("Código de curso inválido");
+				}
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+	});
+	btnNewButton_1.setBounds(137, 41, 117, 29);
+	panel.add(btnNewButton_1);
 	
-	JLabel lblProfesorAsignado = new JLabel("Profesor Asignado:");
-	lblProfesorAsignado.setForeground(new Color(255, 255, 240));
-	lblProfesorAsignado.setFont(new Font("Tahoma", Font.BOLD, 11));
-	lblProfesorAsignado.setBounds(10, 22, 164, 25);
-	panel_1.add(lblProfesorAsignado);
 	
-	JLabel label_5 = new JLabel("");
-	label_5.setForeground(new Color(255, 255, 240));
-	label_5.setBounds(118, 72, 164, 14);
-	panel_1.add(label_5);
-	
-	JLabel label_6 = new JLabel("");
-	label_6.setForeground(new Color(255, 255, 240));
-	label_6.setBounds(118, 51, 164, 14);
-	panel_1.add(label_6);
-	
-	JLabel label_7 = new JLabel("");
-	label_7.setForeground(new Color(255, 255, 240));
-	label_7.setBounds(118, 22, 164, 25);
-	panel_1.add(label_7);
-	
-	JLabel label_8 = new JLabel("");
-	label_8.setForeground(new Color(255, 255, 240));
-	label_8.setBounds(118, 0, 164, 25);
-	panel_1.add(label_8);
-	
-	JButton btnDesactivar = new JButton("Desactivar");
-	btnDesactivar.setFont(new Font("Calibri", Font.PLAIN, 12));
-	btnDesactivar.setBounds(276, 143, 97, 23);
-	panel.add(btnDesactivar);
 	contentPane.setLayout(gl_contentPane);
 }
-
-	
-
 }

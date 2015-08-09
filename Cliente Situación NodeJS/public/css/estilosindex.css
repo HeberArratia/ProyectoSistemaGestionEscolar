@@ -1,0 +1,51 @@
+body{
+	margin: 10 auto;
+	text-align: center;
+	color: white;
+	background-image: url("../images/fondoindex2.jpg");
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+  	-o-background-size: cover;
+  	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+
+html{
+	height: 100%;
+}
+
+h1{
+	font-size: 3em;
+}
+h3{
+	padding-top: 30px;
+}
+
+#contenInput{
+	margin: 0 auto;
+	padding-top: 10px;
+	text-align: left;
+	width: 300px;
+}
+
+#contenInput input{
+	border-radius: 0;
+}
+.miBoton{
+	text-decoration: none;
+	background: transparent;
+	border: 1px solid white;
+	padding: 9px 20px;
+	border-radius: 2px;
+	text-align: center;
+	margin: 0 auto;
+}
+footer{
+	position: fixed;
+	left: 10px;
+	bottom: 10px;
+}
+footer i{
+	font-weight: bolder;
+}

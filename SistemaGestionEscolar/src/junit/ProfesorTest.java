@@ -11,7 +11,7 @@ public class ProfesorTest {
 
 	@Test
 	public void test() {
-		//System.out.println(Profesor.agregarNuevoProfesor(new Persona("Roger","Fulgeri","78763452","323622")));
+		System.out.println(Profesor.agregarNuevoProfesor(new Persona("Catalina","Avello","81238765","323622")));
 		
 			
 		 /*// REGRISTRAR PROMEDIO ESTUDIANTE
@@ -30,7 +30,7 @@ public class ProfesorTest {
 		assertTrue(resultado == "La asistencia fue registrada con anterioridad");
 		// --> Aprobado*/
 		
-		System.out.println(Profesor.registrarPromedio("187003105", 2, "6.1", "78763452"));
+		//System.out.println(Profesor.registrarPromedio("187003105", 2, "6.1", "78763452"));
 	}
 
 }

@@ -35,7 +35,7 @@ public class InscribirEstudiante extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//Obtenemos el codigo del curso
-		String codigoCurso = request.getParameter("codigocurso"); 
+		String codigoCurso = request.getParameter("codigoCurso"); 
 		//Variable que almacena el resultado de la operacion
 		String resultado = "";
 		//Si el codigo del curso es un dato entero

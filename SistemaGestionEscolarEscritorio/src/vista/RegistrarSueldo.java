@@ -67,7 +67,9 @@ public class RegistrarSueldo extends JFrame {
 		button_1.setIcon(new ImageIcon("C:\\Users\\Heber\\Documents\\ProyectoGestionEducacional\\ProyectoGestionEduc-Escritorio\\src\\Files\\deshacer-icono-5993-16.png"));
 		button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
+				Bienvenido bien = new Bienvenido();
+				bien.setVisible(true);
+				setVisible(false);
 			}
 		});
 		button_1.setFont(new Font("Calibri", Font.PLAIN, 12));
